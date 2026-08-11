@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AJATRON — Smart Control System</title>
+
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:#020611;
+  color:#dff3ff;
+  font-family:Arial,sans-serif;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.16;
+  background-image:
+    radial-gradient(#168dff 1px,transparent 1px),
+    linear-gradient(90deg,transparent 49%,#07345b 50%,transparent 51%);
+  background-size:30px 30px,150px 150px;
+}
+
+.app{
+  padding:16px;
+  position:relative;
+}
+
+.panel{
+  background:linear-gradient(145deg,#07172bdd,#020914ee);
+  border:1px solid #0875bd;
+  border-radius:16px;
+  box-shadow:0 0 20px #008cff22;
+}
+
+header{
+  height:75px;
+  padding:12px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.logo{
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:5px;
+}
+
+.logo i{
+  color:#18bfff;
+  font-style:normal;
+}
+
+.sub,.title{
+  color:#61ceff;
+  letter-spacing:2px;
+  font-size:12px;
+}
+
+.clock{
+  text-align:right;
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:190px 1fr 245px;
+  gap:14px;
+  margin-top:14px;
+}
+
+.side{
+  padding:10px;
+}
+
+.nav{
+  padding:14px 10px;
+  margin:6px 0;
+  border:1px solid transparent;
+  border-radius:10px;
+  color:#a8c9e5;
+}
+
+.nav:hover,
+.active{
+  border-color:#158cff;
+  background:#0a2d50;
+  color:#fff;
+}
+
+section{
+  padding:16px;
+}
+
+.title{
+  margin:0 0 12px;
+  font-size:14px;
+}
+
+.grid4{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.status{
+  height:170px;
+  text-align:center;
+  padding:16px 5px;
+  border:1px solid #176fae;
+  border-radius:13px;
+  background:#020b17;
+}
+
+.ring{
+  width:78px;
+  height:78px;
+  border:2px solid #18aaff;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  margin:auto;
+  font-size:30px;
+  box-shadow:0 0 20px #00aaff55;
+}
+
+.status h3{
+  font-size:11px;
+  color:#9bdcff;
+}
+
+.value{
+  font-size:20px;
+  font-weight:bold;
+  color:#20ff9b;
+}
+
+.off{
+  color:#ffb51b;
+}
+
+.purple{
+  color:#c66cff;
+}
+
+.controls{
+  margin-top:14px;
+}
+
+.buttons{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+}
+
+.btn{
+  min-height:105px;
+  background:#06192b;
+  color:white;
+  border:1px solid #168cff;
+  border-radius:13px;
+  font-weight:bold;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.btn:hover{
+  box-shadow:0 0 22px #008cff66;
+  transform:translateY(-2px);
+}
+
+.on{
+  border-color:#18ff83;
+}
+
+.offbtn{
+  border-color:#ff4545;
+}
+
+.tog{
+  border-color:#ffc21a;
+}
+
+.statbtn{
+  border-color:#a94cff;
+}
+
+.ping{
+  border-color:#18d5ff;
+}
+
+.big{
+  display:block;
+  font-size:27px;
+  margin-bottom:8px;
+}
+
+.bottom{
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr;
+  gap:14px;
+  margin-top:14px;
+}
+
+.box{
+  min-height:200px;
+}
+
+.logs{
+  height:135px;
+  overflow:auto;
+  font:11px monospace;
+  line-height:1.8;
+}
+
+.ok{
+  color:#19ff88;
+}
+
+.warn{
+  color:#ffbd20;
+}
+
+.info{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid #12334d;
+  padding:9px 0;
+  font-size:12px;
+}
+
+.info span{
+  color:#7194ad;
+}
+
+.preview{
+  height:210px;
+  display:grid;
+  place-items:center;
+  margin-top:14px;
+}
+
+.bulb{
+  font-size:75px;
+  filter:drop-shadow(0 0 20px #18bfff);
+}
+
+.meter{
+  margin-top:20px;
+}
+
+.bar{
+  height:7px;
+  background:#10263a;
+  border-radius:8px;
+}
+
+.bar i{
+  display:block;
+  width:85%;
+  height:100%;
+  background:#18bfff;
+  box-shadow:0 0 12px #18bfff;
+}
+
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#20c8ff;
+  letter-spacing:3px;
+  font-size:11px;
+}
+
+@media(max-width:1000px){
+
+  .layout{
+    grid-template-columns:1fr;
+  }
+
+  .side{
+    display:flex;
+    overflow:auto;
+    gap:5px;
+  }
+
+  .nav{
+    min-width:110px;
+    text-align:center;
+  }
+
+  .grid4,
+  .buttons{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .bottom{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="panel">
+
+<div>
+  <div class="logo">
+    <i>△</i> AJATRON
+  </div>
+
+  <div class="sub">
+    SMART CONTROL SYSTEM
+  </div>
+</div>
+
+<div class="sub">
+  AI POWERED • CLOUD CONNECTED • EVERYWHERE CONTROL
+</div>
+
+<div class="clock">
+  <b id="time">--:--:--</b>
+  <br>
+  <small id="date">--</small>
+</div>
+
+</header>
+
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+
+<aside class="panel side">
+
+<div class="nav active">⌂ DASHBOARD</div>
+<div class="nav">⏻ CONTROL</div>
+<div class="nav">⌁ STATUS</div>
+<div class="nav">▣ DEVICE INFO</div>
+<div class="nav">♨ SENSORS</div>
+<div class="nav">⚙ AUTOMATION</div>
+<div class="nav">▤ LOGS</div>
+<div class="nav">▥ ANALYTICS</div>
+<div class="nav">⚙ SETTINGS</div>
+<div class="nav">ⓘ ABOUT</div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main>
+
+<section class="panel">
+
+<h2 class="title">
+SYSTEM OVERVIEW
+</h2>
+
+<div class="grid4">
+
+<div class="status">
+
+<div class="ring">☁</div>
+
+<h3>CLOUD STATUS</h3>
+
+<div id="cloud" class="value">
+CONNECTING
+</div>
+
+<small>
+HiveMQ Cloud
+</small>
+
+</div>
+
+
+<div class="status">
+
+<div class="ring">▣</div>
+
+<h3>ESP8266 STATUS</h3>
+
+<div id="device" class="value off">
+OFFLINE
+</div>
+
+<small>
+ESP8266 NodeMCU
+</small>
+
+</div>
+
+
+<div class="status">
+
+<div class="ring">💡</div>
+
+<h3>LED STATUS</h3>
+
+<div id="led" class="value off">
+OFF
+</div>
+
+<small id="last">
+Waiting
+</small>
+
+</div>
+
+
+<div class="status">
+
+<div class="ring">🛡</div>
+
+<h3>SECURITY</h3>
+
+<div class="value purple">
+ACTIVE
+</div>
+
+<small>
+Encrypted connection
+</small>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- CONTROLS -->
+
+<section class="panel controls">
+
+<h2 class="title">
+QUICK CONTROL
+</h2>
+
+<div class="buttons">
+
+<button class="btn on"
+onclick="send('LED_ON')">
+
+<span class="big">⏻</span>
+
+TURN ON
+
+</button>
+
+
+<button class="btn offbtn"
+onclick="send('LED_OFF')">
+
+<span class="big">⏻</span>
+
+TURN OFF
+
+</button>
+
+
+<button class="btn tog"
+onclick="send('TOGGLE')">
+
+<span class="big">⟳</span>
+
+TOGGLE
+
+</button>
+
+
+<button class="btn statbtn"
+onclick="send('STATUS')">
+
+<span class="big">⌁</span>
+
+GET STATUS
+
+</button>
+
+
+<button class="btn ping"
+onclick="send('STATUS')">
+
+<span class="big">◉</span>
+
+PING DEVICE
+
+</button>
+
+</div>
+
+</section>
+
+
+<!-- LOWER PANELS -->
+
+<div class="bottom">
+
+
+<section class="panel box">
+
+<h2 class="title">
+LIVE LOGS
+</h2>
+
+<div id="logs" class="logs">
+AJATRON starting...
+</div>
+
+</section>
+
+
+<section class="panel box">
+
+<h2 class="title">
+SYSTEM ANALYTICS
+</h2>
+
+<div class="info">
+<span>MESSAGES</span>
+<b id="messages">0</b>
+</div>
+
+<div class="info">
+<span>CONNECTION</span>
+<b>ONLINE</b>
+</div>
+
+<div class="info">
+<span>SUCCESS RATE</span>
+<b>100%</b>
+</div>
+
+<div class="info">
+<span>MQTT</span>
+<b>HiveMQ Cloud</b>
+</div>
+
+</section>
+
+
+<section class="panel box">
+
+<h2 class="title">
+DEVICE INFORMATION
+</h2>
+
+<div class="info">
+<span>DEVICE</span>
+<b>ESP8266 NodeMCU</b>
+</div>
+
+<div class="info">
+<span>COMMAND TOPIC</span>
+<b>ajatron/home/command</b>
+</div>
+
+<div class="info">
+<span>STATUS TOPIC</span>
+<b>ajatron/home/status</b>
+</div>
+
+<div class="info">
+<span>LOCATION</span>
+<b>My Home</b>
+</div>
+
+</section>
+
+</div>
+
+</main>
+
+
+<!-- RIGHT PANEL -->
+
+<aside class="panel" style="padding:16px">
+
+<h2 class="title">
+QUICK INFO
+</h2>
+
+<div class="info">
+<span>WiFi Signal</span>
+<b>Connected</b>
+</div>
+
+<div class="info">
+<span>Uptime</span>
+<b id="uptime">00:00:00</b>
+</div>
+
+<div class="info">
+<span>CPU</span>
+<b>80 MHz</b>
+</div>
+
+<div class="info">
+<span>Firmware</span>
+<b>1.0.0</b>
+</div>
+
+
+<div class="meter">
+
+DEVICE CONNECTION
+
+<div class="bar">
+<i></i>
+</div>
+
+</div>
+
+
+<div class="panel preview">
+
+<div id="bulb" class="bulb">
+💡
+</div>
+
+</div>
+
+
+<div class="info">
+
+<span>LED</span>
+
+<b id="preview">
+OFF
+</b>
+
+</div>
+
+</aside>
+
+</div>
+
+
+<div class="footer">
+
+AJATRON SMART CONTROL SYSTEM • FUTURE IS CONNECTED
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================
+   HIVEMQ CONNECTION
+   ===================================== */
+
+const HOST =
+"2ed680f152fb4eb39e590ed9803a3a63.s1.eu.hivemq.cloud";
+
+const PORT = 8884;
+
+const USER =
+"ajatrontest";
+
+
+/*
+   PUT YOUR OLD HIVEMQ PASSWORD BETWEEN
+   THE QUOTES BELOW.
+*/
+
+const PASS =
+"@Ajay1234";
+
+
+/* =====================================
+   MQTT TOPICS
+   ===================================== */
+
+const COMMAND_TOPIC =
+"ajatron/home/command";
+
+const STATUS_TOPIC =
+"ajatron/home/status";
+
+const DEVICE_TOPIC =
+"ajatron/home/device";
+
+
+/* =====================================
+   CONNECT TO HIVEMQ
+   ===================================== */
+
+const client =
+mqtt.connect(
+
+  "wss://" +
+  HOST +
+  ":" +
+  PORT +
+  "/mqtt",
+
+  {
+
+    username:USER,
+
+    password:PASS,
+
+    clientId:
+      "AjatronWeb-" +
+      Math.random()
+      .toString(16)
+      .slice(2),
+
+    reconnectPeriod:3000
+
+  }
+
+);
+
+
+/* =====================================
+   VARIABLES
+   ===================================== */
+
+let messageCount = 0;
+
+let startTime = Date.now();
+
+
+/* =====================================
+   LOG
+   ===================================== */
+
+function log(text){
+
+  const box =
+    document.getElementById("logs");
+
+  box.innerHTML +=
+    "<div class='ok'>" +
+    "[" +
+    new Date().toLocaleTimeString() +
+    "] " +
+    text +
+    "</div>";
+
+  box.scrollTop =
+    box.scrollHeight;
+}
+
+
+/* =====================================
+   LED DISPLAY
+   ===================================== */
+
+function updateLED(state){
+
+  const led =
+    document.getElementById("led");
+
+  const preview =
+    document.getElementById("preview");
+
+  const bulb =
+    document.getElementById("bulb");
+
+
+  if(state){
+
+    led.innerHTML = "ON";
+
+    led.className =
+      "value";
+
+    preview.innerHTML =
+      "ON";
+
+    bulb.style.filter =
+      "drop-shadow(0 0 35px #ffd21a)";
+
+  }
+
+  else{
+
+    led.innerHTML = "OFF";
+
+    led.className =
+      "value off";
+
+    preview.innerHTML =
+      "OFF";
+
+    bulb.style.filter =
+      "drop-shadow(0 0 20px #18bfff)";
+
+  }
+
+
+  document.getElementById("last").innerHTML =
+    "Last update: " +
+    new Date().toLocaleTimeString();
+
+}
+
+
+/* =====================================
+   SEND COMMAND
+   ===================================== */
+
+function send(command){
+
+  if(!client.connected){
+
+    log(
+      "Cloud is not connected."
+    );
+
+    return;
+  }
+
+
+  client.publish(
+    COMMAND_TOPIC,
+    command
+  );
+
+
+  messageCount++;
+
+
+  document.getElementById(
+    "messages"
+  ).innerHTML =
+    messageCount;
+
+
+  log(
+    "Command sent → " +
+    command
+  );
+
+}
+
+
+/* =====================================
+   MQTT CONNECTED
+   ===================================== */
+
+client.on(
+  "connect",
+  function(){
+
+    document.getElementById(
+      "cloud"
+    ).innerHTML =
+      "ONLINE";
+
+
+    log(
+      "HiveMQ Cloud connected"
+    );
+
+
+    client.subscribe(
+      STATUS_TOPIC
+    );
+
+
+    client.subscribe(
+      DEVICE_TOPIC
+    );
+
+
+    setTimeout(
+      function(){
+
+        send("STATUS");
+
+      },
+      500
+    );
+
+  }
+);
+
+
+/* =====================================
+   MQTT RECONNECTING
+   ===================================== */
+
+client.on(
+  "reconnect",
+  function(){
+
+    document.getElementById(
+      "cloud"
+    ).innerHTML =
+      "RECONNECTING";
+
+  }
+);
+
+
+/* =====================================
+   MQTT CLOSED
+   ===================================== */
+
+client.on(
+  "close",
+  function(){
+
+    document.getElementById(
+      "cloud"
+    ).innerHTML =
+      "OFFLINE";
+
+  }
+);
+
+
+/* =====================================
+   MQTT ERROR
+   ===================================== */
+
+client.on(
+  "error",
+  function(error){
+
+    log(
+      "MQTT connection error"
+    );
+
+  }
+);
+
+
+/* =====================================
+   RECEIVED MESSAGE
+   ===================================== */
+
+client.on(
+  "message",
+  function(topic,message){
+
+    const data =
+      message.toString();
+
+
+    messageCount++;
+
+
+    document.getElementById(
+      "messages"
+    ).innerHTML =
+      messageCount;
+
+
+    /* LED STATUS */
+
+    if(
+      topic === STATUS_TOPIC
+    ){
+
+      if(data === "LED_ON"){
+
+        updateLED(true);
+
+      }
+
+
+      if(data === "LED_OFF"){
+
+        updateLED(false);
+
+      }
+
+
+      log(
+        "LED status → " +
+        data
+      );
+
+    }
+
+
+    /* ESP8266 STATUS */
+
+    if(
+      topic === DEVICE_TOPIC
+    ){
+
+      if(
+        data === "ESP8266_ONLINE"
+      ){
+
+        document.getElementById(
+          "device"
+        ).innerHTML =
+          "ONLINE";
+
+        document.getElementById(
+          "device"
+        ).className =
+          "value";
+
+      }
+
+
+      log(
+        "Device → " +
+        data
+      );
+
+    }
+
+  }
+);
+
+
+/* =====================================
+   CLOCK + UPTIME
+   ===================================== */
+
+setInterval(
+  function(){
+
+    const now =
+      new Date();
+
+
+    document.getElementById(
+      "time"
+    ).innerHTML =
+      now.toLocaleTimeString();
+
+
+    document.getElementById(
+      "date"
+    ).innerHTML =
+      now.toLocaleDateString();
+
+
+    const seconds =
+      Math.floor(
+        (Date.now() - startTime) /
+        1000
+      );
+
+
+    const hours =
+      Math.floor(
+        seconds / 3600
+      );
+
+
+    const minutes =
+      Math.floor(
+        (seconds % 3600) / 60
+      );
+
+
+    const secs =
+      seconds % 60;
+
+
+    document.getElementById(
+      "uptime"
+    ).innerHTML =
+
+      String(hours)
+      .padStart(2,"0")
+      + ":" +
+
+      String(minutes)
+      .padStart(2,"0")
+      + ":" +
+
+      String(secs)
+      .padStart(2,"0");
+
+  },
+  1000
+);
+
+</script>
+
+</body>
+</html>

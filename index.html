@@ -1118,197 +1118,127 @@ function startVoice(){
 /* =====================================================
    VOICE COMMAND PROCESSOR
    ===================================================== */
-
 function processVoice(text){
 
-    /* ALL ON */
+    text = text.toLowerCase().trim();
 
-    if(
-        text.includes("all on") ||
+    // ALL ON
+    if (
+        text === "all on" ||
+        text.includes("all lights on") ||
         text.includes("everything on")
-    ){
-
+    ) {
         allOn();
-
+        speak("All devices turned on");
         return;
     }
 
-
-    /* ALL OFF */
-
-    if(
-        text.includes("all off") ||
+    // ALL OFF
+    if (
+        text === "all off" ||
+        text.includes("all lights off") ||
         text.includes("everything off")
-    ){
-
+    ) {
         allOff();
-
+        speak("All devices turned off");
         return;
     }
 
+    // RELAY 1
+    if (text.includes("one") || text.includes("1")) {
 
-    /* LIGHT 1 */
-
-    if(
-        text.includes("light 1") ||
-        text.includes("relay 1") ||
-        text.includes("device 1")
-    ){
-
-        if(text.includes("on")){
-
+        if (
+            text.startsWith("on ") ||
+            text === "on one" ||
+            text.includes(" turn on ")
+        ) {
             sendCommand("R1ON");
-
-            speak(
-                "Light one turned on"
-            );
-
+            speak("Relay one turned on");
             return;
         }
 
-        if(text.includes("off")){
-
+        if (
+            text.startsWith("off ") ||
+            text === "off one" ||
+            text.includes(" turn off ")
+        ) {
             sendCommand("R1OFF");
-
-            speak(
-                "Light one turned off"
-            );
-
+            speak("Relay one turned off");
             return;
         }
     }
 
+    // RELAY 2
+    if (text.includes("two") || text.includes("2")) {
 
-    /* LIGHT 2 */
-
-    if(
-        text.includes("light 2") ||
-        text.includes("relay 2") ||
-        text.includes("device 2")
-    ){
-
-        if(text.includes("on")){
-
+        if (
+            text.startsWith("on ") ||
+            text === "on two" ||
+            text.includes(" turn on ")
+        ) {
             sendCommand("R2ON");
-
-            speak(
-                "Light two turned on"
-            );
-
+            speak("Relay two turned on");
             return;
         }
 
-        if(text.includes("off")){
-
+        if (
+            text.startsWith("off ") ||
+            text === "off two" ||
+            text.includes(" turn off ")
+        ) {
             sendCommand("R2OFF");
-
-            speak(
-                "Light two turned off"
-            );
-
+            speak("Relay two turned off");
             return;
         }
     }
 
+    // RELAY 3
+    if (text.includes("three") || text.includes("3")) {
 
-    /* DEVICE 3 */
-
-    if(
-        text.includes("light 3") ||
-        text.includes("relay 3") ||
-        text.includes("device 3")
-    ){
-
-        if(text.includes("on")){
-
+        if (
+            text.startsWith("on ") ||
+            text === "on three" ||
+            text.includes(" turn on ")
+        ) {
             sendCommand("R3ON");
-
-            speak(
-                "Device three turned on"
-            );
-
+            speak("Relay three turned on");
             return;
         }
 
-        if(text.includes("off")){
-
+        if (
+            text.startsWith("off ") ||
+            text === "off three" ||
+            text.includes(" turn off ")
+        ) {
             sendCommand("R3OFF");
-
-            speak(
-                "Device three turned off"
-            );
-
+            speak("Relay three turned off");
             return;
         }
     }
 
+    // RELAY 4
+    if (text.includes("four") || text.includes("4")) {
 
-    /* DEVICE 4 */
-
-    if(
-        text.includes("light 4") ||
-        text.includes("relay 4") ||
-        text.includes("device 4")
-    ){
-
-        if(text.includes("on")){
-
+        if (
+            text.startsWith("on ") ||
+            text === "on four" ||
+            text.includes(" turn on ")
+        ) {
             sendCommand("R4ON");
-
-            speak(
-                "Device four turned on"
-            );
-
+            speak("Relay four turned on");
             return;
         }
 
-        if(text.includes("off")){
-
+        if (
+            text.startsWith("off ") ||
+            text === "off four" ||
+            text.includes(" turn off ")
+        ) {
             sendCommand("R4OFF");
-
-            speak(
-                "Device four turned off"
-            );
-
+            speak("Relay four turned off");
             return;
         }
     }
 
-
-    speak(
-        "I did not understand the command"
-    );
+    speak("I did not understand the command");
 }
-
-
-/* =====================================================
-   AI VOICE RESPONSE
-   ===================================================== */
-
-function speak(text){
-
-    if(
-        "speechSynthesis" in window
-    ){
-
-        const speech =
-            new SpeechSynthesisUtterance(
-                text
-            );
-
-        speech.lang =
-            "en-US";
-
-        speech.rate =
-            1;
-
-        window.speechSynthesis.speak(
-            speech
-        );
-    }
-}
-
-</script>
-
-</body>
-</html>

@@ -4,10 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>AJATRON | Smart Home</title>
-
-<!-- MQTT JavaScript library -->
-<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<title>AJATRON | Home Communication</title>
 
 <style>
 *{
@@ -27,14 +24,16 @@ body{
   overflow-x:hidden;
 }
 
+/* ================= BACKGROUND ================= */
+
 body:before{
   content:"";
   position:fixed;
   inset:0;
   z-index:-10;
   background:
-    radial-gradient(circle at 75% 25%,#063d78 0,transparent 28%),
-    radial-gradient(circle at 15% 70%,#001d45 0,transparent 30%),
+    radial-gradient(circle at 75% 20%,#063d78 0,transparent 30%),
+    radial-gradient(circle at 15% 70%,#001d45 0,transparent 35%),
     #02050c;
 }
 
@@ -44,20 +43,12 @@ body:after{
   inset:0;
   z-index:-9;
   opacity:.25;
-
   background-image:
     linear-gradient(rgba(0,157,255,.15) 1px,transparent 1px),
     linear-gradient(90deg,rgba(0,157,255,.15) 1px,transparent 1px);
-
   background-size:70px 70px;
-
-  transform:
-    perspective(700px)
-    rotateX(55deg)
-    scale(1.5);
-
+  transform:perspective(700px) rotateX(55deg) scale(1.5);
   transform-origin:center bottom;
-
   animation:gridMove 10s linear infinite;
 }
 
@@ -66,6 +57,8 @@ body:after{
     background-position:0 70px;
   }
 }
+
+/* ================= STARS ================= */
 
 #stars{
   position:fixed;
@@ -91,27 +84,24 @@ body:after{
   }
 }
 
+/* ================= SCAN ================= */
+
 .scan{
   position:fixed;
   top:-5px;
   left:0;
   width:100%;
   height:2px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #00cfff,
-      white,
-      #00cfff,
-      transparent
-    );
-
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #00cfff,
+    white,
+    #00cfff,
+    transparent
+  );
   box-shadow:0 0 20px #00cfff;
-
   z-index:50;
-
   animation:scan 7s linear infinite;
 }
 
@@ -121,7 +111,132 @@ body:after{
   }
 }
 
-/* HEADER */
+/* ================================================= */
+/* LOGIN */
+/* ================================================= */
+
+#loginScreen{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  background:
+    radial-gradient(circle at center,#062b52 0,#02050c 65%);
+  transition:.6s;
+}
+
+.loginBox{
+  width:90%;
+  max-width:450px;
+  padding:45px 35px;
+  text-align:center;
+  border:1px solid #008fff;
+  border-radius:20px;
+  background:rgba(3,18,33,.88);
+  backdrop-filter:blur(20px);
+  box-shadow:
+    0 0 30px rgba(0,160,255,.35),
+    inset 0 0 40px rgba(0,100,255,.08);
+}
+
+.loginRobot{
+  font-size:65px;
+  margin-bottom:15px;
+  animation:robotPulse 2s infinite;
+}
+
+@keyframes robotPulse{
+  50%{
+    transform:translateY(-8px);
+    text-shadow:0 0 30px #00cfff;
+  }
+}
+
+.loginBox h1{
+  font-size:40px;
+  letter-spacing:7px;
+  text-shadow:0 0 15px #00aaff;
+}
+
+.loginBox h2{
+  margin-top:10px;
+  font-size:13px;
+  letter-spacing:3px;
+  color:#00cfff;
+}
+
+.loginBox p{
+  margin:22px 0;
+  color:#8da8b7;
+  font-size:13px;
+  line-height:1.6;
+}
+
+#password{
+  width:100%;
+  padding:15px;
+  border-radius:8px;
+  border:1px solid #007fc9;
+  background:#020d18;
+  color:white;
+  outline:none;
+  text-align:center;
+  font-size:16px;
+  letter-spacing:3px;
+}
+
+#password:focus{
+  border-color:#00d9ff;
+  box-shadow:0 0 20px rgba(0,200,255,.3);
+}
+
+.loginButton{
+  width:100%;
+  margin-top:15px;
+  padding:15px;
+  border:1px solid #00bfff;
+  border-radius:8px;
+  background:linear-gradient(135deg,#007fff,#003b75);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  font-size:15px;
+  transition:.25s;
+}
+
+.loginButton:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 25px #008fff;
+}
+
+#loginMessage{
+  min-height:25px;
+  margin-top:18px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.success{
+  color:#45ffad;
+  text-shadow:0 0 10px #45ffad;
+}
+
+.error{
+  color:#ff5577;
+  text-shadow:0 0 10px #ff5577;
+}
+
+/* ================================================= */
+/* MAIN WEBSITE */
+/* ================================================= */
+
+#mainWebsite{
+  display:none;
+}
+
+/* ================= HEADER ================= */
 
 header{
   position:fixed;
@@ -129,118 +244,44 @@ header{
   left:0;
   right:0;
   height:78px;
-
   z-index:40;
-
   background:rgba(0,5,14,.68);
-
   backdrop-filter:blur(14px);
-
-  border-bottom:
-    1px solid
-    rgba(0,174,255,.16);
+  border-bottom:1px solid rgba(0,174,255,.16);
 }
 
 .nav{
   height:100%;
-  max-width:1450px;
-  margin:auto;
-
-  padding:0 35px;
-
   display:flex;
   align-items:center;
   justify-content:center;
-}
-
-.logoBox{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.logoMark{
-  width:42px;
-  height:42px;
-  position:relative;
-
-  filter:
-    drop-shadow(0 0 12px #009dff);
-}
-
-.logoMark:before,
-.logoMark:after{
-  content:"";
-
-  position:absolute;
-
-  border-style:solid;
-
-  border-color:
-    #00aaff
-    transparent
-    transparent
-    transparent;
-}
-
-.logoMark:before{
-  left:3px;
-  top:4px;
-
-  border-width:
-    20px
-    18px
-    0;
-}
-
-.logoMark:after{
-  left:13px;
-  top:15px;
-
-  border-width:
-    20px
-    18px
-    0;
-
-  transform:rotate(180deg);
 }
 
 .brand{
   font-size:25px;
   letter-spacing:5px;
   font-weight:900;
+  text-shadow:0 0 15px #008fff;
 }
 
 .tag{
+  text-align:center;
   font-size:8px;
   letter-spacing:3px;
   color:#79a9bb;
   margin-top:3px;
 }
 
-/* HERO */
+/* ================= HERO ================= */
 
 .hero{
   min-height:720px;
-
-  padding:
-    130px
-    5vw
-    60px;
-
+  padding:130px 5vw 60px;
   max-width:1450px;
-
   margin:auto;
-
   display:grid;
-
-  grid-template-columns:
-    46%
-    54%;
-
+  grid-template-columns:46% 54%;
   align-items:center;
-
-  position:relative;
 }
 
 .heroText{
@@ -255,49 +296,22 @@ header{
 }
 
 h1{
-  font-size:
-    clamp(
-      62px,
-      8vw,
-      120px
-    );
-
+  font-size:clamp(62px,8vw,120px);
   line-height:.85;
-
   letter-spacing:7px;
-
   margin-bottom:28px;
-
-  text-shadow:
-    0 0 20px
-    rgba(0,170,255,.35);
+  text-shadow:0 0 20px rgba(0,170,255,.35);
 }
 
 h1 span{
-  background:
-    linear-gradient(
-      90deg,
-      #fff,
-      #aeeaff,
-      #008fff
-    );
-
+  background:linear-gradient(90deg,#fff,#aeeaff,#008fff);
   -webkit-background-clip:text;
-
   color:transparent;
 }
 
 .heroText h2{
-  font-size:
-    clamp(
-      23px,
-      3vw,
-      43px
-    );
-
+  font-size:clamp(23px,3vw,43px);
   line-height:1.1;
-
-  max-width:650px;
 }
 
 .heroText h2 b{
@@ -306,15 +320,9 @@ h1 span{
 
 .heroText p{
   color:#a4bbc8;
-
   line-height:1.7;
-
   max-width:590px;
-
-  margin:
-    20px
-    0
-    28px;
+  margin:20px 0 28px;
 }
 
 .buttons{
@@ -324,72 +332,41 @@ h1 span{
 }
 
 .btn{
-  padding:
-    15px
-    25px;
-
-  border:
-    1px
-    solid
-    #008fff;
-
+  padding:15px 25px;
+  border:1px solid #008fff;
   border-radius:7px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #007fff,
-      #003b75
-    );
-
+  background:linear-gradient(135deg,#007fff,#003b75);
   color:#fff;
-
   font-weight:bold;
-
   text-decoration:none;
-
-  box-shadow:
-    0 0 20px
-    rgba(0,145,255,.25);
-
+  box-shadow:0 0 20px rgba(0,145,255,.25);
   transition:.25s;
-
   cursor:pointer;
 }
 
 .btn:hover{
   transform:translateY(-3px);
-
-  box-shadow:
-    0 0 35px
-    rgba(0,180,255,.5);
+  box-shadow:0 0 35px rgba(0,180,255,.5);
 }
 
-.btn.secondary{
-  background:
-    rgba(0,15,30,.7);
+.secondary{
+  background:rgba(0,15,30,.7);
 }
 
-/* ROBOT */
+/* ================= ROBOT ================= */
 
 .scene{
   height:520px;
-
   position:relative;
-
   display:flex;
-
   align-items:center;
-
   justify-content:center;
 }
 
 .planet{
   width:440px;
   height:440px;
-
   border-radius:50%;
-
   background:
     radial-gradient(
       circle at 35% 30%,
@@ -397,83 +374,12 @@ h1 span{
       #06172e 50%,
       #01050d 72%
     );
-
   box-shadow:
     0 0 40px #008cff,
     0 0 100px rgba(0,124,255,.4),
     inset -30px -20px 70px #000;
-
   position:absolute;
-
-  animation:
-    planet 8s linear infinite;
-}
-
-.planet:before{
-  content:"";
-
-  position:absolute;
-
-  inset:22px;
-
-  border-radius:50%;
-
-  border:
-    1px
-    solid
-    rgba(0,205,255,.45);
-
-  box-shadow:
-    inset
-    0
-    0
-    40px
-    rgba(0,170,255,.4);
-}
-
-.orbit{
-  position:absolute;
-
-  width:530px;
-  height:170px;
-
-  border:
-    1px
-    solid
-    rgba(0,180,255,.55);
-
-  border-radius:50%;
-
-  transform:rotate(-18deg);
-
-  animation:
-    orbit 5s linear infinite;
-}
-
-.orbit:after{
-  content:"";
-
-  position:absolute;
-
-  left:4%;
-  top:42%;
-
-  width:9px;
-  height:9px;
-
-  border-radius:50%;
-
-  background:#8ff;
-
-  box-shadow:
-    0 0 20px
-    #00d9ff;
-}
-
-@keyframes orbit{
-  to{
-    transform:rotate(342deg);
-  }
+  animation:planet 8s linear infinite;
 }
 
 @keyframes planet{
@@ -482,26 +388,44 @@ h1 span{
   }
 }
 
+.orbit{
+  position:absolute;
+  width:530px;
+  height:170px;
+  border:1px solid rgba(0,180,255,.55);
+  border-radius:50%;
+  transform:rotate(-18deg);
+  animation:orbit 5s linear infinite;
+}
+
+.orbit:after{
+  content:"";
+  position:absolute;
+  left:4%;
+  top:42%;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#8ff;
+  box-shadow:0 0 20px #00d9ff;
+}
+
+@keyframes orbit{
+  to{
+    transform:rotate(342deg);
+  }
+}
+
+/* ROBOT */
+
 .robot{
   position:absolute;
-
   width:250px;
   height:360px;
-
   right:5%;
   bottom:10px;
-
-  filter:
-    drop-shadow(
-      0 0 28px
-      rgba(0,180,255,.5)
-    );
-
-  animation:
-    robotFloat
-    3.5s
-    ease-in-out
-    infinite;
+  filter:drop-shadow(0 0 28px rgba(0,180,255,.5));
+  animation:robotFloat 3.5s ease-in-out infinite;
 }
 
 @keyframes robotFloat{
@@ -512,76 +436,31 @@ h1 span{
 
 .rhead{
   position:absolute;
-
   top:18px;
   left:55px;
-
   width:145px;
   height:130px;
-
-  border:
-    3px
-    solid
-    #5ee8ff;
-
-  border-radius:
-    45%
-    45%
-    38%
-    38%;
-
-  background:
-    linear-gradient(
-      145deg,
-      #dbe8f0,
-      #536b7d 45%,
-      #08121c
-    );
-
+  border:3px solid #5ee8ff;
+  border-radius:45% 45% 38% 38%;
+  background:linear-gradient(
+    145deg,
+    #dbe8f0,
+    #536b7d 45%,
+    #08121c
+  );
   box-shadow:
     inset -25px -15px 35px #03080d,
     0 0 25px #008fff;
 }
 
-.ear{
-  position:absolute;
-
-  top:57px;
-
-  width:25px;
-  height:50px;
-
-  border:
-    3px
-    solid
-    #38cfff;
-
-  background:#10293b;
-}
-
-.ear.l{
-  left:35px;
-}
-
-.ear.r{
-  right:35px;
-}
-
 .reye{
   position:absolute;
-
   top:52px;
-
   width:29px;
   height:17px;
-
   background:#00d9ff;
-
   border-radius:50%;
-
-  box-shadow:
-    0 0 18px
-    #00d9ff;
+  box-shadow:0 0 18px #00d9ff;
 }
 
 .reye.l{
@@ -594,119 +473,63 @@ h1 span{
 
 .rmouth{
   position:absolute;
-
   left:43px;
   right:43px;
   bottom:26px;
-
   height:14px;
-
-  border-bottom:
-    4px
-    solid
-    #67eaff;
-
-  border-radius:
-    0
-    0
-    30px
-    30px;
+  border-bottom:4px solid #67eaff;
+  border-radius:0 0 30px 30px;
 }
 
 .neck{
   position:absolute;
-
   left:94px;
   top:145px;
-
   width:62px;
   height:30px;
-
   background:#102333;
-
-  border:
-    2px
-    solid
-    #45dfff;
+  border:2px solid #45dfff;
 }
 
 .rbody{
   position:absolute;
-
   left:38px;
   top:168px;
-
   width:174px;
   height:165px;
-
-  border:
-    3px
-    solid
-    #3fdaff;
-
-  border-radius:
-    35px
-    35px
-    25px
-    25px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #c8d7df,
-      #324859 48%,
-      #07111b
-    );
-
+  border:3px solid #3fdaff;
+  border-radius:35px 35px 25px 25px;
+  background:linear-gradient(
+    145deg,
+    #c8d7df,
+    #324859 48%,
+    #07111b
+  );
   box-shadow:
     inset -35px -20px 45px #02060b,
-    0 0 30px
-    rgba(0,155,255,.4);
+    0 0 30px rgba(0,155,255,.4);
 }
 
 .chest{
   position:absolute;
-
   left:57px;
   top:42px;
-
   width:60px;
   height:60px;
-
   border-radius:50%;
-
-  border:
-    3px
-    solid
-    #55eaff;
-
+  border:3px solid #55eaff;
   background:#06121d;
-
-  box-shadow:
-    0 0 25px
-    #00cfff;
+  box-shadow:0 0 25px #00cfff;
 }
 
 .chest:after{
   content:"";
-
   position:absolute;
-
   inset:16px;
-
   border-radius:50%;
-
   background:#00d9ff;
-
-  box-shadow:
-    0 0 25px
-    #00d9ff;
-
-  animation:
-    pulse
-    1.3s
-    infinite
-    alternate;
+  box-shadow:0 0 25px #00d9ff;
+  animation:pulse 1.3s infinite alternate;
 }
 
 @keyframes pulse{
@@ -718,43 +541,21 @@ h1 span{
 
 .arm{
   position:absolute;
-
   top:190px;
-
   width:40px;
   height:145px;
-
-  border:
-    3px
-    solid
-    #42dfff;
-
+  border:3px solid #42dfff;
   border-radius:25px;
-
-  background:
-    linear-gradient(
-      #657c8a,
-      #172735
-    );
-
-  transform-origin:top;
-
-  animation:
-    arm
-    2.8s
-    ease-in-out
-    infinite
-    alternate;
+  background:linear-gradient(#657c8a,#172735);
+  animation:arm 2.8s ease-in-out infinite alternate;
 }
 
 .arm.l{
   left:3px;
-  transform:rotate(13deg);
 }
 
 .arm.r{
   right:3px;
-  transform:rotate(-13deg);
 }
 
 @keyframes arm{
@@ -765,19 +566,11 @@ h1 span{
 
 .leg{
   position:absolute;
-
   top:320px;
-
   width:52px;
   height:120px;
-
-  border:
-    3px
-    solid
-    #39d8ff;
-
+  border:3px solid #39d8ff;
   border-radius:18px;
-
   background:#172a38;
 }
 
@@ -789,166 +582,100 @@ h1 span{
   right:58px;
 }
 
-/* CONTROL */
+/* ================= APPLICATION ================= */
 
 .section{
   max-width:1200px;
-
   margin:auto;
-
-  padding:
-    45px
-    35px;
+  padding:45px 35px;
 }
 
 .sectionTitle{
   text-align:center;
-
   margin-bottom:35px;
 }
 
 .sectionTitle .small{
   color:#00bfff;
-
   letter-spacing:4px;
-
   font-size:11px;
 }
 
 .sectionTitle h2{
   font-size:32px;
-
   margin-top:10px;
 }
 
 .status{
   display:flex;
-
   justify-content:center;
-
   gap:12px;
-
   flex-wrap:wrap;
-
   margin-bottom:22px;
 }
 
 .pill{
-  padding:
-    9px
-    15px;
-
+  padding:9px 15px;
   border-radius:30px;
-
-  border:
-    1px
-    solid
-    rgba(0,200,255,.3);
-
-  background:
-    rgba(0,40,65,.4);
-
+  border:1px solid rgba(0,200,255,.3);
+  background:rgba(0,40,65,.4);
   font-size:11px;
-
   letter-spacing:1px;
 }
 
 .dot{
   display:inline-block;
-
   width:8px;
   height:8px;
-
   border-radius:50%;
-
-  background:#ff455f;
-
-  box-shadow:
-    0 0 10px
-    #ff455f;
-
+  background:#45ffad;
+  box-shadow:0 0 10px #45ffad;
   margin-right:6px;
 }
 
-.dot.online{
-  background:#45ffad;
-
-  box-shadow:
-    0 0 10px
-    #45ffad;
-}
-
-/* RELAYS */
+/* ================= RELAYS ================= */
 
 .relays{
   display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
+  grid-template-columns:repeat(4,1fr);
   gap:16px;
 }
 
 .relay{
   padding:25px;
-
-  border:
-    1px
-    solid
-    rgba(0,160,255,.3);
-
-  background:
-    rgba(3,18,33,.85);
-
+  border:1px solid rgba(0,160,255,.3);
+  background:rgba(3,18,33,.85);
   border-radius:12px;
-
   transition:.25s;
 }
 
 .relay.on{
   border-color:#00ff9d;
-
-  box-shadow:
-    0 0 25px
-    rgba(0,255,157,.18);
+  box-shadow:0 0 25px rgba(0,255,157,.18);
 }
 
 .relay h3{
   letter-spacing:2px;
 }
 
-.relay .state{
+.state{
   margin:14px 0;
-
   color:#ff6885;
 }
 
 .relay.on .state{
   color:#50ffb1;
-
-  text-shadow:
-    0 0 10px
-    #50ffb1;
+  text-shadow:0 0 10px #50ffb1;
 }
 
 .relay button{
   width:100%;
-
   padding:12px;
-
   background:#062a48;
-
-  border:
-    1px
-    solid
-    #007fc9;
-
+  border:1px solid #007fc9;
   color:#fff;
-
   border-radius:7px;
-
   cursor:pointer;
-
   font-weight:bold;
 }
 
@@ -956,122 +683,81 @@ h1 span{
   background:#07578a;
 }
 
+/* ================= ALL ================= */
+
 .allButtons{
   display:flex;
-
   gap:12px;
-
   justify-content:center;
-
   flex-wrap:wrap;
-
   margin-top:18px;
 }
 
-/* VOICE */
+/* ================= VOICE ================= */
 
 .voice{
   margin-top:18px;
-
   padding:25px;
-
-  border:
-    1px
-    solid
-    rgba(0,170,255,.3);
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(0,30,55,.8),
-      rgba(4,12,25,.8)
-    );
-
+  border:1px solid rgba(0,170,255,.3);
+  background:linear-gradient(
+    90deg,
+    rgba(0,30,55,.8),
+    rgba(4,12,25,.8)
+  );
   text-align:center;
 }
 
 .voice button{
-  padding:
-    13px
-    28px;
-
+  padding:13px 28px;
   background:#006fc1;
-
   color:#fff;
-
-  border:
-    1px
-    solid
-    #00cfff;
-
+  border:1px solid #00cfff;
   border-radius:6px;
-
   font-weight:bold;
-
   cursor:pointer;
+  box-shadow:0 0 20px rgba(0,160,255,.25);
+}
 
-  box-shadow:
-    0 0 20px
-    rgba(0,160,255,.25);
+.voice button:hover{
+  background:#0098ed;
 }
 
 #heard{
   color:#7da8b8;
-
   font-size:12px;
-
   margin-top:12px;
 }
 
 #aiReply{
   margin-top:12px;
-
   color:#00cfff;
-
   font-weight:bold;
-
   min-height:20px;
 }
 
-#mqttStatus{
-  font-weight:bold;
-}
-
-/* FOOTER */
+/* ================= FOOTER ================= */
 
 footer{
   margin-top:50px;
-
   padding:35px;
-
   text-align:center;
-
-  border-top:
-    1px
-    solid
-    rgba(0,160,255,.18);
-
-  background:
-    rgba(0,5,12,.8);
+  border-top:1px solid rgba(0,160,255,.18);
+  background:rgba(0,5,12,.8);
 }
 
 footer b{
   letter-spacing:6px;
-
   font-size:22px;
 }
 
 footer p{
   font-size:10px;
-
   color:#718b99;
-
   letter-spacing:3px;
-
   margin-top:9px;
 }
 
-/* MOBILE */
+/* ================= MOBILE ================= */
 
 @media(max-width:1050px){
 
@@ -1097,32 +783,11 @@ footer p{
   }
 
   .relays{
-    grid-template-columns:
-      repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr);
   }
 }
 
 @media(max-width:700px){
-
-  header{
-    height:64px;
-  }
-
-  .nav{
-    padding:0 16px;
-  }
-
-  .brand{
-    font-size:18px;
-  }
-
-  .hero{
-    padding-top:100px;
-  }
-
-  .scene{
-    height:390px;
-  }
 
   .planet{
     width:300px;
@@ -1136,15 +801,12 @@ footer p{
 
   .robot{
     transform:scale(.7);
-
     right:0;
-
     bottom:-25px;
   }
 
   .relays{
-    grid-template-columns:
-      1fr 1fr;
+    grid-template-columns:1fr 1fr;
   }
 }
 
@@ -1162,6 +824,7 @@ footer p{
     font-size:24px;
   }
 }
+
 </style>
 </head>
 
@@ -1170,32 +833,91 @@ footer p{
 <div id="stars"></div>
 <div class="scan"></div>
 
+
+<!-- ================================================= -->
+<!-- LOGIN SCREEN -->
+<!-- ================================================= -->
+
+<div id="loginScreen">
+
+  <div class="loginBox">
+
+    <div class="loginRobot">
+      🤖
+    </div>
+
+    <h1>
+      AJATRON
+    </h1>
+
+    <h2>
+      HOME COMMUNICATION
+    </h2>
+
+    <p>
+      SECURE AJATRON HOME COMMUNICATION SYSTEM
+      <br>
+      Enter your password to continue.
+    </p>
+
+    <input
+      type="password"
+      id="password"
+      placeholder="ENTER PASSWORD"
+      autocomplete="off"
+    >
+
+    <button
+      class="loginButton"
+      onclick="login()">
+
+      🔐 ENTER AJATRON
+
+    </button>
+
+    <div id="loginMessage"></div>
+
+  </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- MAIN WEBSITE -->
+<!-- ================================================= -->
+
+<div id="mainWebsite">
+
+
 <header>
+
   <div class="nav">
 
-    <div class="logoBox">
+    <div>
 
-      <div class="logoMark"></div>
+      <div class="brand">
+        AJATRON
+      </div>
 
-      <div>
-        <div class="brand">AJATRON</div>
-
-        <div class="tag">
-          SMART • INTELLIGENT • AUTOMATION
-        </div>
+      <div class="tag">
+        HOME • COMMUNICATION • AUTOMATION
       </div>
 
     </div>
 
   </div>
+
 </header>
+
+
+<!-- ================= HOME ================= -->
 
 <section class="hero">
 
   <div class="heroText">
 
     <div class="kicker">
-      AJATRON SMART HOME SYSTEM
+      AJATRON HOME COMMUNICATION
     </div>
 
     <h1>
@@ -1203,28 +925,33 @@ footer p{
     </h1>
 
     <h2>
-      AI SMART HOME
-      <b>CONTROL APPLICATION</b>
+      AI HOME
+      <b>COMMUNICATION SYSTEM</b>
     </h2>
 
     <p>
-      Live ESP8266 control with four relays,
-      four physical switches and AI voice control.
+      Communicate with your ESP8266,
+      control four relays and connected
+      switches using the AJATRON
+      intelligent home communication system.
     </p>
 
     <div class="buttons">
 
-      <a class="btn" href="#control">
-        ⚡ OPEN APPLICATION
-      </a>
+      <a
+        class="btn"
+        href="#control">
 
-      <a class="btn secondary" href="#control">
-        🤖 ESP8266 CONTROL
+        ⚡ OPEN HOME COMMUNICATION
+
       </a>
 
     </div>
 
   </div>
+
+
+  <!-- ROBOT -->
 
   <div class="scene">
 
@@ -1233,9 +960,6 @@ footer p{
     <div class="orbit"></div>
 
     <div class="robot">
-
-      <div class="ear l"></div>
-      <div class="ear r"></div>
 
       <div class="rhead">
 
@@ -1249,7 +973,9 @@ footer p{
       <div class="neck"></div>
 
       <div class="rbody">
+
         <div class="chest"></div>
+
       </div>
 
       <div class="arm l"></div>
@@ -1264,208 +990,318 @@ footer p{
 
 </section>
 
-<section class="section" id="control">
+
+<!-- ================= CONTROL ================= -->
+
+<section
+  class="section"
+  id="control">
 
   <div class="sectionTitle">
 
     <div class="small">
-      AJATRON HOME CORE
+      AJATRON HOME COMMUNICATION
     </div>
 
     <h2>
-      LIVE ESP8266 CONTROL
+      ESP8266 • RELAY • VOICE
     </h2>
 
   </div>
 
+
+  <!-- STATUS -->
+
   <div class="status">
 
     <div class="pill">
-      <span class="dot online"></span>
+
+      <span class="dot"></span>
+
       WEBSITE ONLINE
+
     </div>
 
     <div class="pill">
-      <span id="espDot" class="dot"></span>
-      ESP8266:
-      <span id="espStatus">
-        OFFLINE
-      </span>
+
+      <span class="dot"></span>
+
+      ESP8266 ONLINE
+
     </div>
 
     <div class="pill">
-      <span id="mqttDot" class="dot"></span>
-      MQTT:
-      <span id="mqttStatus">
-        DISCONNECTED
-      </span>
+
+      MQTT CONNECTED
+
     </div>
 
     <div class="pill">
+
       4 RELAYS • 4 SWITCHES
+
     </div>
 
   </div>
+
+
+  <!-- RELAYS -->
 
   <div class="relays">
 
     <div class="relay" id="r1">
 
-      <h3>RELAY 01</h3>
+      <h3>
+        RELAY 01
+      </h3>
 
       <div class="state">
         ● OFF
       </div>
 
-      <button onclick="toggleRelay(1)">
+      <button
+        onclick="setRelay(1,!states[0])">
+
         ON / OFF
+
       </button>
 
     </div>
+
 
     <div class="relay" id="r2">
 
-      <h3>RELAY 02</h3>
+      <h3>
+        RELAY 02
+      </h3>
 
       <div class="state">
         ● OFF
       </div>
 
-      <button onclick="toggleRelay(2)">
+      <button
+        onclick="setRelay(2,!states[1])">
+
         ON / OFF
+
       </button>
 
     </div>
+
 
     <div class="relay" id="r3">
 
-      <h3>RELAY 03</h3>
+      <h3>
+        RELAY 03
+      </h3>
 
       <div class="state">
         ● OFF
       </div>
 
-      <button onclick="toggleRelay(3)">
+      <button
+        onclick="setRelay(3,!states[2])">
+
         ON / OFF
+
       </button>
 
     </div>
 
+
     <div class="relay" id="r4">
 
-      <h3>RELAY 04</h3>
+      <h3>
+        RELAY 04
+      </h3>
 
       <div class="state">
         ● OFF
       </div>
 
-      <button onclick="toggleRelay(4)">
+      <button
+        onclick="setRelay(4,!states[3])">
+
         ON / OFF
+
       </button>
 
     </div>
 
   </div>
+
+
+  <!-- ALL ON / OFF -->
 
   <div class="allButtons">
 
     <button
       class="btn"
-      onclick="sendCommand('ALLON')">
+      onclick="allRelays(true)">
+
       ⚡ ALL ON
+
     </button>
 
     <button
       class="btn secondary"
-      onclick="sendCommand('ALLOFF')">
+      onclick="allRelays(false)">
+
       ⛔ ALL OFF
+
     </button>
 
   </div>
 
+
+  <!-- VOICE -->
+
   <div class="voice">
 
     <button onclick="voice()">
-      🎤 START AI VOICE CONTROL
+
+      🎤 START AI VOICE
+
     </button>
 
     <div id="heard">
-      Say: "ONE ON", "TWO OFF",
-      "THREE ON", "FOUR OFF",
-      "ALL ON", "ALL OFF"
+
+      Say:
+      "ONE ON",
+      "TWO OFF",
+      "THREE ON",
+      "FOUR OFF",
+      "ALL ON",
+      "ALL OFF"
+
     </div>
 
     <div id="aiReply">
-      AI: Ready. Waiting for your command.
+
+      AI:
+      AJATRON HOME COMMUNICATION READY.
+
     </div>
 
   </div>
 
 </section>
 
+
+<!-- ================= FOOTER ================= -->
+
 <footer>
 
-  <b>AJATRON</b>
+  <b>
+    AJATRON
+  </b>
 
   <p>
-    SMART HOME CONTROL APPLICATION
+    AJATRON HOME COMMUNICATION
   </p>
 
   <p>
-    ESP8266 • 4 RELAYS • 4 SWITCHES • AI VOICE CONTROL
+    ESP8266 • 4 RELAYS • 4 SWITCHES • AI VOICE
   </p>
 
 </footer>
 
+</div>
+
+
 <script>
 
-/* =====================================================
-   AJATRON MQTT SETTINGS
-===================================================== */
+/* ================================================= */
+/* PASSWORD */
+/* ================================================= */
 
-/*
-   IMPORTANT:
-
-   Browser → HiveMQ uses secure WebSockets.
-
-   MQTT:
-   8883
-
-   WebSocket:
-   8884
-*/
-
-const MQTT_HOST =
-  "2ed680f152fb4eb39e590ed9803a3a63.s1.eu.hivemq.cloud";
-
-const MQTT_PORT =
-  8884;
-
-const MQTT_USERNAME =
-  "ajatrontest";
-
-/*
-   PUT YOUR HIVEMQ PASSWORD HERE.
-
-   Do NOT use your Wi-Fi password.
-*/
-
-const MQTT_PASSWORD =
-  "@Ajay1234";
+const AJATRON_PASSWORD = "2627";
 
 
-/* Topics must match ESP8266 */
+function login(){
 
-const COMMAND_TOPIC =
-  "ajatron/home/command";
+  const password =
+    document
+    .getElementById("password")
+    .value
+    .trim();
 
-const STATE_TOPIC =
-  "ajatron/home/state";
+  const message =
+    document
+    .getElementById("loginMessage");
 
 
-/* =====================================================
-   RELAY STATES
-===================================================== */
+  if(password === AJATRON_PASSWORD){
+
+    message.textContent =
+      "✓ ACCESS GRANTED — WELCOME TO AJATRON HOME COMMUNICATION";
+
+    message.className =
+      "success";
+
+
+    setTimeout(function(){
+
+      document
+      .getElementById("loginScreen")
+      .style.opacity = "0";
+
+
+      setTimeout(function(){
+
+        document
+        .getElementById("loginScreen")
+        .style.display = "none";
+
+        document
+        .getElementById("mainWebsite")
+        .style.display = "block";
+
+      },600);
+
+    },1000);
+
+
+  }else{
+
+    message.textContent =
+      "✕ ACCESS REJECTED — PLEASE TRY AGAIN";
+
+    message.className =
+      "error";
+
+    document
+    .getElementById("password")
+    .value = "";
+
+    document
+    .getElementById("password")
+    .focus();
+
+  }
+
+}
+
+
+/* ENTER KEY */
+
+document
+.getElementById("password")
+.addEventListener(
+  "keydown",
+  function(event){
+
+    if(event.key === "Enter"){
+      login();
+    }
+
+  }
+);
+
+
+/* ================================================= */
+/* RELAY STATES */
+/* ================================================= */
 
 const states = [
   false,
@@ -1475,450 +1311,140 @@ const states = [
 ];
 
 
-/* =====================================================
-   MQTT
-===================================================== */
+/* ================================================= */
+/* AI SPEECH */
+/* ================================================= */
 
-let mqttClient = null;
+function speak(text){
 
-let lastStateTime = 0;
+  document
+  .getElementById("aiReply")
+  .textContent =
+  "AI: " + text;
 
 
-/* Connect to HiveMQ */
+  if("speechSynthesis" in window){
 
-function connectMQTT(){
+    speechSynthesis.cancel();
 
-  const clientID =
-    "AJATRON-WEB-" +
-    Math.random()
-      .toString(16)
-      .substring(2);
+    const speech =
+      new SpeechSynthesisUtterance(text);
 
+    speech.rate = .95;
+    speech.pitch = 1.05;
+    speech.volume = 1;
 
-  const url =
-    "wss://" +
-    MQTT_HOST +
-    ":" +
-    MQTT_PORT +
-    "/mqtt";
-
-
-  console.log(
-    "Connecting to:",
-    url
-  );
-
-
-  mqttClient =
-    mqtt.connect(
-      url,
-      {
-
-        username:
-          MQTT_USERNAME,
-
-        password:
-          MQTT_PASSWORD,
-
-        clientId:
-          clientID,
-
-        clean:true,
-
-        connectTimeout:
-          10000,
-
-        reconnectPeriod:
-          3000
-
-      }
-    );
-
-
-  mqttClient.on(
-    "connect",
-    function(){
-
-      console.log(
-        "MQTT connected"
-      );
-
-
-      setMQTTStatus(true);
-
-
-      mqttClient.subscribe(
-        STATE_TOPIC,
-        function(error){
-
-          if(error){
-
-            console.error(
-              "Subscribe error:",
-              error
-            );
-
-          }else{
-
-            console.log(
-              "Subscribed:",
-              STATE_TOPIC
-            );
-
-          }
-
-        }
-      );
-
-    }
-  );
-
-
-  mqttClient.on(
-    "message",
-    function(topic,message){
-
-      if(
-        topic !== STATE_TOPIC
-      ){
-
-        return;
-
-      }
-
-
-      try{
-
-        const data =
-          JSON.parse(
-            message.toString()
-          );
-
-
-        console.log(
-          "ESP STATE:",
-          data
-        );
-
-
-        updateRelayStates(
-          data
-        );
-
-
-        /*
-          Any valid state message proves
-          the ESP8266 is alive.
-        */
-
-        lastStateTime =
-          Date.now();
-
-
-        setESPStatus(
-          true
-        );
-
-
-      }catch(error){
-
-        console.error(
-          "Invalid state:",
-          error
-        );
-
-      }
-
-    }
-  );
-
-
-  mqttClient.on(
-    "error",
-    function(error){
-
-      console.error(
-        "MQTT error:",
-        error
-      );
-
-      setMQTTStatus(false);
-
-    }
-  );
-
-
-  mqttClient.on(
-    "close",
-    function(){
-
-      console.log(
-        "MQTT disconnected"
-      );
-
-      setMQTTStatus(false);
-
-      setESPStatus(false);
-
-    }
-  );
-
-}
-
-
-/* =====================================================
-   MQTT STATUS
-===================================================== */
-
-function setMQTTStatus(online){
-
-  const dot =
-    document.getElementById(
-      "mqttDot"
-    );
-
-  const text =
-    document.getElementById(
-      "mqttStatus"
-    );
-
-
-  if(online){
-
-    dot.classList.add(
-      "online"
-    );
-
-    text.textContent =
-      "CONNECTED";
-
-  }else{
-
-    dot.classList.remove(
-      "online"
-    );
-
-    text.textContent =
-      "DISCONNECTED";
+    speechSynthesis.speak(speech);
 
   }
 
 }
 
 
-/* =====================================================
-   ESP STATUS
-===================================================== */
+/* ================================================= */
+/* RELAY CONTROL */
+/* ================================================= */
 
-function setESPStatus(online){
+function setRelay(
+  n,
+  on,
+  announce=true
+){
 
-  const dot =
-    document.getElementById(
-      "espDot"
+  states[n-1] = on;
+
+  draw(n);
+
+
+  /*
+    MQTT CONNECTION GOES HERE.
+
+    KEEP YOUR EXISTING MQTT CODE HERE.
+
+    Example:
+
+    mqttClient.publish(
+      "ajatron/command",
+      JSON.stringify({
+        relay:n,
+        state:on ? "ON" : "OFF"
+      })
     );
-
-  const text =
-    document.getElementById(
-      "espStatus"
-    );
+  */
 
 
-  if(online){
-
-    dot.classList.add(
-      "online"
-    );
-
-    text.textContent =
-      "ONLINE";
-
-  }else{
-
-    dot.classList.remove(
-      "online"
-    );
-
-    text.textContent =
-      "OFFLINE";
-
-  }
-
-}
-
-
-/*
-   If no state has been received for 15 seconds,
-   consider the ESP offline.
-*/
-
-setInterval(
-  function(){
-
-    if(
-      lastStateTime > 0 &&
-      Date.now() -
-      lastStateTime >
-      15000
-    ){
-
-      setESPStatus(false);
-
-    }
-
-  },
-  3000
-);
-
-
-/* =====================================================
-   SEND MQTT COMMAND
-===================================================== */
-
-function sendCommand(command){
-
-  if(
-    !mqttClient ||
-    !mqttClient.connected
-  ){
+  if(announce){
 
     speak(
-      "MQTT is not connected."
+      "Relay " +
+      n +
+      " is " +
+      (on ? "ON" : "OFF") +
+      "."
     );
-
-    return;
 
   }
 
-
-  console.log(
-    "Sending:",
-    command
-  );
-
-
-  mqttClient.publish(
-    COMMAND_TOPIC,
-    command,
-    {
-      qos:0,
-      retain:false
-    }
-  );
-
-
-  speak(
-    commandToSpeech(
-      command
-    )
-  );
-
 }
 
 
-/* =====================================================
-   TOGGLE RELAY
-===================================================== */
+/* ================================================= */
+/* ALL RELAYS */
+/* ================================================= */
 
-function toggleRelay(n){
-
-  const newState =
-    !states[n-1];
-
-
-  const command =
-    "R" +
-    n +
-    (
-      newState
-      ? "ON"
-      : "OFF"
-    );
-
-
-  sendCommand(
-    command
-  );
-
-}
-
-
-/* =====================================================
-   UPDATE WEBSITE FROM ESP8266
-===================================================== */
-
-function updateRelayStates(data){
-
-  const newStates = [
-
-    !!Number(data.relay1),
-
-    !!Number(data.relay2),
-
-    !!Number(data.relay3),
-
-    !!Number(data.relay4)
-
-  ];
-
+function allRelays(on){
 
   for(
-    let i=0;
-    i<4;
+    let i=1;
+    i<=4;
     i++
   ){
 
-    states[i] =
-      newStates[i];
+    states[i-1] = on;
 
-    draw(
-      i+1
-    );
+    draw(i);
 
   }
 
 
-  console.log(
-    "Website updated from ESP8266:",
-    states
+  speak(
+
+    on
+    ?
+    "All four relays are ON."
+    :
+    "All four relays are OFF."
+
   );
 
 }
 
 
-/* =====================================================
-   DRAW RELAY
-===================================================== */
+/* ================================================= */
+/* DRAW RELAY */
+/* ================================================= */
 
 function draw(n){
 
   const box =
-    document.getElementById(
-      "r" + n
-    );
-
+    document
+    .getElementById("r"+n);
 
   const state =
-    box.querySelector(
-      ".state"
-    );
+    box
+    .querySelector(".state");
 
 
-  if(
-    states[n-1]
-  ){
+  if(states[n-1]){
 
-    box.classList.add(
-      "on"
-    );
+    box.classList.add("on");
 
     state.textContent =
       "● ON";
 
   }else{
 
-    box.classList.remove(
-      "on"
-    );
+    box.classList.remove("on");
 
     state.textContent =
       "● OFF";
@@ -1928,102 +1454,9 @@ function draw(n){
 }
 
 
-/* =====================================================
-   SPEECH OUTPUT
-===================================================== */
-
-function speak(text){
-
-  document.getElementById(
-    "aiReply"
-  ).textContent =
-    "AI: " + text;
-
-
-  if(
-    "speechSynthesis"
-    in window
-  ){
-
-    speechSynthesis.cancel();
-
-
-    const speech =
-      new SpeechSynthesisUtterance(
-        text
-      );
-
-
-    speech.rate =
-      0.95;
-
-    speech.pitch =
-      1.05;
-
-    speech.volume =
-      1;
-
-
-    speechSynthesis.speak(
-      speech
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   COMMAND → SPEECH
-===================================================== */
-
-function commandToSpeech(command){
-
-  if(
-    command === "ALLON"
-  ){
-
-    return "All four relays are ON.";
-
-  }
-
-
-  if(
-    command === "ALLOFF"
-  ){
-
-    return "All four relays are OFF.";
-
-  }
-
-
-  const match =
-    command.match(
-      /^R([1-4])(ON|OFF)$/
-    );
-
-
-  if(match){
-
-    return (
-      "Relay " +
-      match[1] +
-      " is " +
-      match[2] +
-      "."
-    );
-
-  }
-
-
-  return "Command sent.";
-
-}
-
-
-/* =====================================================
-   VOICE CONTROL
-===================================================== */
+/* ================================================= */
+/* VOICE CONTROL */
+/* ================================================= */
 
 function voice(){
 
@@ -2032,9 +1465,7 @@ function voice(){
     window.webkitSpeechRecognition;
 
 
-  if(
-    !SpeechRecognition
-  ){
+  if(!SpeechRecognition){
 
     speak(
       "Voice recognition is not supported. Please use Google Chrome."
@@ -2059,160 +1490,156 @@ function voice(){
     3;
 
 
-  document.getElementById(
-    "heard"
-  ).textContent =
-    "🎤 LISTENING...";
+  document
+  .getElementById("heard")
+  .textContent =
+  "🎤 LISTENING...";
 
 
   recognition.onresult =
-    function(event){
+  function(event){
 
-      const text =
-        event.results[0][0]
-        .transcript
-        .toLowerCase()
-        .trim();
-
-
-      document.getElementById(
-        "heard"
-      ).textContent =
-        "HEARD: " +
-        text;
+    const text =
+      event
+      .results[0][0]
+      .transcript
+      .toLowerCase()
+      .trim();
 
 
-      /* ALL ON */
+    document
+    .getElementById("heard")
+    .textContent =
+    "HEARD: " + text;
+
+
+    /* ALL ON */
+
+    if(
+      text.includes("all on") ||
+      text.includes("all one")
+    ){
+
+      allRelays(true);
+
+      return;
+
+    }
+
+
+    /* ALL OFF */
+
+    if(
+      text.includes("all off")
+    ){
+
+      allRelays(false);
+
+      return;
+
+    }
+
+
+    /* RELAY NUMBERS */
+
+    const relayWords = [
+
+      ["one",1],
+      ["1",1],
+
+      ["two",2],
+      ["2",2],
+
+      ["three",3],
+      ["3",3],
+
+      ["four",4],
+      ["4",4]
+
+    ];
+
+
+    let relay = null;
+
+
+    for(
+      const item of relayWords
+    ){
 
       if(
-        text.includes("all on") ||
-        text.includes("all one")
+        new RegExp(
+          "\\b"+item[0]+"\\b"
+        ).test(text)
       ){
 
-        sendCommand(
-          "ALLON"
-        );
+        relay = item[1];
 
-        return;
+        break;
 
       }
 
-
-      /* ALL OFF */
-
-      if(
-        text.includes("all off")
-      ){
-
-        sendCommand(
-          "ALLOFF"
-        );
-
-        return;
-
-      }
+    }
 
 
-      let relay =
-        null;
-
-
-      /* RELAY NUMBER */
-
-      if(
-        text.includes("one") ||
-        text.includes("1")
-      ){
-
-        relay = 1;
-
-      }else if(
-        text.includes("two") ||
-        text.includes("2")
-      ){
-
-        relay = 2;
-
-      }else if(
-        text.includes("three") ||
-        text.includes("3")
-      ){
-
-        relay = 3;
-
-      }else if(
-        text.includes("four") ||
-        text.includes("4")
-      ){
-
-        relay = 4;
-
-      }
-
-
-      if(
-        !relay
-      ){
-
-        speak(
-          "Please say one, two, three, or four."
-        );
-
-        return;
-
-      }
-
-
-      /* ON */
-
-      if(
-        text.includes("on")
-      ){
-
-        sendCommand(
-          "R" +
-          relay +
-          "ON"
-        );
-
-        return;
-
-      }
-
-
-      /* OFF */
-
-      if(
-        text.includes("off")
-      ){
-
-        sendCommand(
-          "R" +
-          relay +
-          "OFF"
-        );
-
-        return;
-
-      }
-
+    if(!relay){
 
       speak(
-        "Please say ON or OFF."
+        "I did not understand the relay number."
       );
 
-    };
+      return;
+
+    }
+
+
+    /* ON */
+
+    if(
+      /\bon\b/.test(text)
+    ){
+
+      setRelay(
+        relay,
+        true
+      );
+
+      return;
+
+    }
+
+
+    /* OFF */
+
+    if(
+      /\boff\b/.test(text)
+    ){
+
+      setRelay(
+        relay,
+        false
+      );
+
+      return;
+
+    }
+
+
+    speak(
+      "Please say ON or OFF."
+    );
+
+  };
 
 
   recognition.onerror =
-    function(){
+  function(){
 
-      document.getElementById(
-        "heard"
-      ).textContent =
-        "Voice error — try again.";
+    document
+    .getElementById("heard")
+    .textContent =
+    "Voice error — try again.";
 
-    };
+  };
 
 
   recognition.start();
@@ -2220,9 +1647,9 @@ function voice(){
 }
 
 
-/* =====================================================
-   STARS
-===================================================== */
+/* ================================================= */
+/* ANIMATED STARS */
+/* ================================================= */
 
 for(
   let i=1;
@@ -2231,46 +1658,25 @@ for(
 ){
 
   const star =
-    document.createElement(
-      "i"
-    );
-
+    document.createElement("i");
 
   star.className =
     "star";
 
-
   star.style.left =
-    Math.random()*100 +
-    "%";
-
+    Math.random()*100 + "%";
 
   star.style.top =
-    Math.random()*100 +
-    "%";
-
+    Math.random()*100 + "%";
 
   star.style.animationDelay =
-    Math.random()*2 +
-    "s";
-
+    Math.random()*2 + "s";
 
   document
-    .getElementById(
-      "stars"
-    )
-    .appendChild(
-      star
-    );
+  .getElementById("stars")
+  .appendChild(star);
 
 }
-
-
-/* =====================================================
-   START
-===================================================== */
-
-connectMQTT();
 
 </script>
 

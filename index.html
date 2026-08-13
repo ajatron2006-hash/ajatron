@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AJATRON | Home Communication</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AJATRON | Smart Home</title>
 
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 
@@ -21,7 +22,7 @@ html{
 body{
   font-family:Arial,Helvetica,sans-serif;
   background:#02050c;
-  color:white;
+  color:#fff;
   overflow-x:hidden;
 }
 
@@ -102,7 +103,7 @@ body:after{
   to{top:105vh;}
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 
 header{
   position:fixed;
@@ -111,7 +112,7 @@ header{
   right:0;
   height:78px;
   z-index:40;
-  background:rgba(0,5,14,.68);
+  background:rgba(0,5,14,.75);
   backdrop-filter:blur(14px);
   border-bottom:1px solid rgba(0,174,255,.16);
 }
@@ -173,7 +174,7 @@ header{
   margin-top:3px;
 }
 
-/* HERO */
+/* ================= HERO ================= */
 
 .hero{
   min-height:720px;
@@ -256,7 +257,7 @@ h1 span{
   background:rgba(0,15,30,.7);
 }
 
-/* ROBOT */
+/* ================= ROBOT ================= */
 
 .scene{
   height:520px;
@@ -459,7 +460,7 @@ h1 span{
 .leg.l{left:58px;}
 .leg.r{right:58px;}
 
-/* APPLICATION */
+/* ================= APPLICATION ================= */
 
 .section{
   max-width:1200px;
@@ -515,7 +516,7 @@ h1 span{
   box-shadow:0 0 10px #45ffad;
 }
 
-/* RELAYS */
+/* ================= RELAYS ================= */
 
 .relays{
   display:grid;
@@ -573,13 +574,17 @@ h1 span{
   margin-top:18px;
 }
 
-/* VOICE */
+/* ================= VOICE ================= */
 
 .voice{
   margin-top:18px;
   padding:25px;
   border:1px solid rgba(0,170,255,.3);
-  background:linear-gradient(90deg,rgba(0,30,55,.8),rgba(4,12,25,.8));
+  background:linear-gradient(
+    90deg,
+    rgba(0,30,55,.8),
+    rgba(4,12,25,.8)
+  );
   text-align:center;
   border-radius:10px;
 }
@@ -608,7 +613,33 @@ h1 span{
   min-height:20px;
 }
 
-/* LOGIN */
+/* ================= LOG ================= */
+
+.logBox{
+  margin-top:20px;
+  padding:18px;
+  background:#010812;
+  border:1px solid rgba(0,150,255,.25);
+  border-radius:10px;
+}
+
+.logTitle{
+  color:#00bfff;
+  font-size:12px;
+  letter-spacing:2px;
+  margin-bottom:10px;
+}
+
+#eventLog{
+  height:130px;
+  overflow:auto;
+  font-family:monospace;
+  font-size:11px;
+  color:#7fa6b7;
+  line-height:1.7;
+}
+
+/* ================= LOGIN ================= */
 
 #loginScreen{
   position:fixed;
@@ -680,7 +711,7 @@ h1 span{
   font-size:13px;
 }
 
-/* FOOTER */
+/* ================= FOOTER ================= */
 
 footer{
   margin-top:50px;
@@ -702,7 +733,7 @@ footer p{
   margin-top:9px;
 }
 
-/* MOBILE */
+/* ================= MOBILE ================= */
 
 @media(max-width:1050px){
 
@@ -795,17 +826,25 @@ footer p{
 
 <body>
 
-<!-- LOGIN -->
+<!-- =====================================================
+     LOGIN
+===================================================== -->
 
 <div id="loginScreen">
 
   <div class="loginBox">
 
-    <div class="loginLogo">AJATRON</div>
+    <div class="loginLogo">
+      AJATRON
+    </div>
 
-    <h2>HOME COMMUNICATION</h2>
+    <h2>
+      HOME COMMUNICATION
+    </h2>
 
-    <p>SECURE SMART HOME ACCESS</p>
+    <p>
+      SECURE SMART HOME ACCESS
+    </p>
 
     <input
       id="passwordInput"
@@ -814,7 +853,10 @@ footer p{
       autocomplete="off"
     >
 
-    <button id="loginButton" onclick="login()">
+    <button
+      id="loginButton"
+      onclick="login()"
+    >
       ENTER AJATRON
     </button>
 
@@ -824,8 +866,14 @@ footer p{
 
 </div>
 
+
 <div id="stars"></div>
 <div class="scan"></div>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header>
 
@@ -837,7 +885,9 @@ footer p{
 
       <div>
 
-        <div class="brand">AJATRON</div>
+        <div class="brand">
+          AJATRON
+        </div>
 
         <div class="tag">
           SMART • INTELLIGENT • AUTOMATION
@@ -850,6 +900,11 @@ footer p{
   </div>
 
 </header>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
 
 <section class="hero" id="home">
 
@@ -869,17 +924,24 @@ footer p{
     </h2>
 
     <p>
-      Control your ESP8266, four relays and physical
-      switches using MQTT and AI voice commands.
+      Control your ESP8266, four relays and four
+      physical switches using HiveMQ MQTT and AI
+      voice commands.
     </p>
 
     <div class="buttons">
 
-      <a class="btn" href="#control">
+      <a
+        class="btn"
+        href="#control"
+      >
         ⚡ OPEN APPLICATION
       </a>
 
-      <a class="btn secondary" href="#control">
+      <a
+        class="btn secondary"
+        href="#control"
+      >
         🤖 ESP8266 CONTROL
       </a>
 
@@ -887,9 +949,11 @@ footer p{
 
   </div>
 
+
   <div class="scene">
 
     <div class="planet"></div>
+
     <div class="orbit"></div>
 
     <div class="robot">
@@ -926,7 +990,15 @@ footer p{
 
 </section>
 
-<section class="section" id="control">
+
+<!-- =====================================================
+     CONTROL
+===================================================== -->
+
+<section
+  class="section"
+  id="control"
+>
 
   <div class="sectionTitle">
 
@@ -940,35 +1012,52 @@ footer p{
 
   </div>
 
+
   <!-- STATUS -->
 
   <div class="status">
 
     <div class="pill">
 
-      <span id="webDot" class="dot online"></span>
+      <span
+        id="webDot"
+        class="dot online"
+      ></span>
 
       WEBSITE ONLINE
 
     </div>
 
+
     <div class="pill">
 
-      <span id="espDot" class="dot"></span>
+      <span
+        id="espDot"
+        class="dot"
+      ></span>
 
       ESP8266:
-      <span id="espStatus">OFFLINE</span>
+      <span id="espStatus">
+        OFFLINE
+      </span>
 
     </div>
+
 
     <div class="pill">
 
-      <span id="mqttDot" class="dot"></span>
+      <span
+        id="mqttDot"
+        class="dot"
+      ></span>
 
       MQTT:
-      <span id="mqttStatus">DISCONNECTED</span>
+      <span id="mqttStatus">
+        DISCONNECTED
+      </span>
 
     </div>
+
 
     <div class="pill">
       4 RELAYS • 4 SWITCHES
@@ -976,53 +1065,93 @@ footer p{
 
   </div>
 
+
   <!-- RELAYS -->
 
   <div class="relays">
 
-    <div class="relay" id="r1">
+    <div
+      class="relay"
+      id="r1"
+    >
 
-      <h3>RELAY 01</h3>
+      <h3>
+        RELAY 01
+      </h3>
 
-      <div class="state">● OFF</div>
+      <div class="state">
+        ● OFF
+      </div>
 
-      <button onclick="toggleRelay(1)">
+      <button
+        onclick="toggleRelay(1)"
+      >
         ON / OFF
       </button>
 
     </div>
 
-    <div class="relay" id="r2">
 
-      <h3>RELAY 02</h3>
+    <div
+      class="relay"
+      id="r2"
+    >
 
-      <div class="state">● OFF</div>
+      <h3>
+        RELAY 02
+      </h3>
 
-      <button onclick="toggleRelay(2)">
+      <div class="state">
+        ● OFF
+      </div>
+
+      <button
+        onclick="toggleRelay(2)"
+      >
         ON / OFF
       </button>
 
     </div>
 
-    <div class="relay" id="r3">
 
-      <h3>RELAY 03</h3>
+    <div
+      class="relay"
+      id="r3"
+    >
 
-      <div class="state">● OFF</div>
+      <h3>
+        RELAY 03
+      </h3>
 
-      <button onclick="toggleRelay(3)">
+      <div class="state">
+        ● OFF
+      </div>
+
+      <button
+        onclick="toggleRelay(3)"
+      >
         ON / OFF
       </button>
 
     </div>
 
-    <div class="relay" id="r4">
 
-      <h3>RELAY 04</h3>
+    <div
+      class="relay"
+      id="r4"
+    >
 
-      <div class="state">● OFF</div>
+      <h3>
+        RELAY 04
+      </h3>
 
-      <button onclick="toggleRelay(4)">
+      <div class="state">
+        ● OFF
+      </div>
+
+      <button
+        onclick="toggleRelay(4)"
+      >
         ON / OFF
       </button>
 
@@ -1030,23 +1159,35 @@ footer p{
 
   </div>
 
+
+  <!-- ALL BUTTONS -->
+
   <div class="allButtons">
 
-    <button class="btn" onclick="allRelays(true)">
+    <button
+      class="btn"
+      onclick="allRelays(true)"
+    >
       ⚡ ALL ON
     </button>
 
-    <button class="btn secondary" onclick="allRelays(false)">
+    <button
+      class="btn secondary"
+      onclick="allRelays(false)"
+    >
       ⛔ ALL OFF
     </button>
 
   </div>
 
+
   <!-- VOICE -->
 
   <div class="voice">
 
-    <button onclick="voice()">
+    <button
+      onclick="voice()"
+    >
       🎤 START AI VOICE CONTROL
     </button>
 
@@ -1064,11 +1205,33 @@ footer p{
 
   </div>
 
+
+  <!-- EVENT LOG -->
+
+  <div class="logBox">
+
+    <div class="logTitle">
+      AJATRON SYSTEM LOG
+    </div>
+
+    <div id="eventLog">
+      AJATRON system ready...
+    </div>
+
+  </div>
+
 </section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
 
 <footer>
 
-  <b>AJATRON</b>
+  <b>
+    AJATRON
+  </b>
 
   <p>
     HOME COMMUNICATION SYSTEM
@@ -1080,6 +1243,7 @@ footer p{
 
 </footer>
 
+
 <script>
 
 /* =====================================================
@@ -1088,28 +1252,37 @@ footer p{
 
 const CONFIG = {
 
-  /* WEBSITE PASSWORD */
+  /* WEBSITE LOGIN PASSWORD */
 
   WEBSITE_PASSWORD: "2627",
 
 
-  /* HIVE MQ CLOUD */
+  /* HIVEMQ CLOUD */
 
   MQTT_HOST:
     "2ed680f152fb4eb39e590ed9803a3a63.s1.eu.hivemq.cloud",
 
-  MQTT_PORT: 8884,
+  MQTT_PORT:
+    8884,
 
-  MQTT_PATH: "/mqtt",
+  MQTT_PATH:
+    "/mqtt",
 
   MQTT_USERNAME:
     "ajatrontest",
 
+  /*
+     IMPORTANT:
+     This MUST match the password
+     configured in your HiveMQ account
+     and ESP8266 code.
+  */
+
   MQTT_PASSWORD:
-    "@Ajatron1234",
+    "@Ajay1234",
 
 
-  /* MQTT TOPICS */
+  /* TOPICS */
 
   COMMAND_TOPIC:
     "ajatron/command",
@@ -1124,7 +1297,7 @@ const CONFIG = {
 
 
 /* =====================================================
-   RELAY STATES
+   GLOBAL STATE
 ===================================================== */
 
 const states = [
@@ -1134,9 +1307,52 @@ const states = [
   false
 ];
 
-
 let mqttClient = null;
+
 let loggedIn = false;
+
+let welcomeSpoken = false;
+
+
+/* =====================================================
+   LOG
+===================================================== */
+
+function log(message){
+
+  const box =
+    document.getElementById("eventLog");
+
+  if(!box){
+    return;
+  }
+
+  const time =
+    new Date().toLocaleTimeString();
+
+  box.innerHTML +=
+    "<div>[" +
+    time +
+    "] " +
+    escapeHTML(message) +
+    "</div>";
+
+  box.scrollTop =
+    box.scrollHeight;
+
+}
+
+
+function escapeHTML(text){
+
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
 
 
 /* =====================================================
@@ -1146,30 +1362,56 @@ let loggedIn = false;
 function login(){
 
   const password =
-    document.getElementById("passwordInput").value;
+    document
+      .getElementById("passwordInput")
+      .value;
 
   const message =
-    document.getElementById("loginMessage");
+    document
+      .getElementById("loginMessage");
 
 
-  if(password === CONFIG.WEBSITE_PASSWORD){
+  if(
+    password ===
+    CONFIG.WEBSITE_PASSWORD
+  ){
 
     loggedIn = true;
 
-    document.getElementById("loginScreen").style.display =
-      "none";
+    document
+      .getElementById("loginScreen")
+      .style.display = "none";
 
-    speak(
-      "Welcome to Ajatron Home Communication."
-    );
+    message.textContent = "";
+
+    log("Login successful.");
+
+    /*
+       Welcome voice
+    */
+
+    setTimeout(function(){
+
+      speak(
+        "Welcome to Ajatron Home Communication."
+      );
+
+    },300);
+
+
+    /*
+       Connect MQTT
+    */
 
     setTimeout(function(){
 
       connectMQTT();
 
-    },500);
+    },800);
 
-  }else{
+  }
+
+  else{
 
     message.textContent =
       "ACCESS REJECTED — PLEASE TRY AGAIN.";
@@ -1177,15 +1419,20 @@ function login(){
     message.style.color =
       "#ff5577";
 
-    document.getElementById("passwordInput").value =
-      "";
+    document
+      .getElementById("passwordInput")
+      .value = "";
+
+    log("Invalid login attempt.");
 
   }
 
 }
 
 
-/* ENTER KEY */
+/* =====================================================
+   ENTER KEY LOGIN
+===================================================== */
 
 document
   .getElementById("passwordInput")
@@ -1207,21 +1454,47 @@ document
 
 function speak(text){
 
-  document.getElementById("aiReply").textContent =
-    "AI: " + text;
+  document
+    .getElementById("aiReply")
+    .textContent =
+      "AI: " + text;
 
-  if("speechSynthesis" in window){
 
-    speechSynthesis.cancel();
+  if(
+    "speechSynthesis" in window
+  ){
 
-    const speech =
-      new SpeechSynthesisUtterance(text);
+    try{
 
-    speech.rate = 0.95;
-    speech.pitch = 1.05;
-    speech.volume = 1;
+      speechSynthesis.cancel();
 
-    speechSynthesis.speak(speech);
+      const speech =
+        new SpeechSynthesisUtterance(text);
+
+      speech.lang =
+        "en-US";
+
+      speech.rate =
+        0.95;
+
+      speech.pitch =
+        1.05;
+
+      speech.volume =
+        1;
+
+      speechSynthesis.speak(
+        speech
+      );
+
+    }catch(error){
+
+      console.error(
+        "Speech error:",
+        error
+      );
+
+    }
 
   }
 
@@ -1229,27 +1502,38 @@ function speak(text){
 
 
 /* =====================================================
-   MQTT STATUS UI
+   MQTT STATUS
 ===================================================== */
 
 function setMQTTStatus(online){
 
   const dot =
-    document.getElementById("mqttDot");
+    document.getElementById(
+      "mqttDot"
+    );
 
   const text =
-    document.getElementById("mqttStatus");
+    document.getElementById(
+      "mqttStatus"
+    );
+
 
   if(online){
 
-    dot.classList.add("online");
+    dot.classList.add(
+      "online"
+    );
 
     text.textContent =
       "CONNECTED";
 
-  }else{
+  }
 
-    dot.classList.remove("online");
+  else{
+
+    dot.classList.remove(
+      "online"
+    );
 
     text.textContent =
       "DISCONNECTED";
@@ -1260,27 +1544,38 @@ function setMQTTStatus(online){
 
 
 /* =====================================================
-   ESP STATUS UI
+   ESP STATUS
 ===================================================== */
 
 function setESPStatus(online){
 
   const dot =
-    document.getElementById("espDot");
+    document.getElementById(
+      "espDot"
+    );
 
   const text =
-    document.getElementById("espStatus");
+    document.getElementById(
+      "espStatus"
+    );
+
 
   if(online){
 
-    dot.classList.add("online");
+    dot.classList.add(
+      "online"
+    );
 
     text.textContent =
       "ONLINE";
 
-  }else{
+  }
 
-    dot.classList.remove("online");
+  else{
+
+    dot.classList.remove(
+      "online"
+    );
 
     text.textContent =
       "OFFLINE";
@@ -1291,7 +1586,7 @@ function setESPStatus(online){
 
 
 /* =====================================================
-   CONNECT MQTT
+   MQTT CONNECT
 ===================================================== */
 
 function connectMQTT(){
@@ -1302,29 +1597,13 @@ function connectMQTT(){
 
 
   if(
-    !CONFIG.MQTT_PASSWORD ||
-    CONFIG.MQTT_PASSWORD ===
-      "YOUR_HIVEMQ_PASSWORD"
+    typeof mqtt ===
+    "undefined"
   ){
 
-    setMQTTStatus(false);
-
-    speak(
-      "Please enter your HiveMQ password in the website code."
+    log(
+      "MQTT JavaScript library failed to load."
     );
-
-    console.error(
-      "MQTT password has not been configured."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    typeof mqtt === "undefined"
-  ){
 
     speak(
       "MQTT library could not be loaded."
@@ -1360,8 +1639,13 @@ function connectMQTT(){
     CONFIG.MQTT_PATH;
 
 
+  log(
+    "Connecting to HiveMQ..."
+  );
+
+
   console.log(
-    "Connecting to:",
+    "AJATRON MQTT URL:",
     url
   );
 
@@ -1371,7 +1655,8 @@ function connectMQTT(){
       url,
       {
 
-        clientId: clientId,
+        clientId:
+          clientId,
 
         username:
           CONFIG.MQTT_USERNAME,
@@ -1379,51 +1664,58 @@ function connectMQTT(){
         password:
           CONFIG.MQTT_PASSWORD,
 
-        clean: true,
+        clean:
+          true,
 
-        reconnectPeriod: 3000,
+        reconnectPeriod:
+          3000,
 
-        connectTimeout: 10000,
+        connectTimeout:
+          10000,
 
-        keepalive: 60,
+        keepalive:
+          60,
 
-        protocolVersion: 4
+        protocolVersion:
+          4
 
       }
     );
 
 
+  /* ================= CONNECT ================= */
+
   mqttClient.on(
     "connect",
     function(){
 
-      console.log(
-        "AJATRON MQTT CONNECTED"
-      );
-
       setMQTTStatus(true);
 
-      speak(
-        "MQTT connected. Ajatron is ready."
+      log(
+        "MQTT connected."
       );
 
+
+      /*
+         Subscribe to state
+      */
 
       mqttClient.subscribe(
         CONFIG.STATE_TOPIC,
         {qos:0},
-        function(err){
+        function(error){
 
-          if(err){
+          if(error){
 
-            console.error(
-              "State subscribe error:",
-              err
+            log(
+              "State subscribe error."
             );
 
-          }else{
+          }
+          else{
 
-            console.log(
-              "Subscribed:",
+            log(
+              "Subscribed: " +
               CONFIG.STATE_TOPIC
             );
 
@@ -1433,22 +1725,26 @@ function connectMQTT(){
       );
 
 
+      /*
+         Subscribe to ESP status
+      */
+
       mqttClient.subscribe(
         CONFIG.STATUS_TOPIC,
         {qos:0},
-        function(err){
+        function(error){
 
-          if(err){
+          if(error){
 
-            console.error(
-              "Status subscribe error:",
-              err
+            log(
+              "Status subscribe error."
             );
 
-          }else{
+          }
+          else{
 
-            console.log(
-              "Subscribed:",
+            log(
+              "Subscribed: " +
               CONFIG.STATUS_TOPIC
             );
 
@@ -1457,95 +1753,137 @@ function connectMQTT(){
         }
       );
 
-    }
-  );
 
+      /*
+         Do NOT say "MQTT connected"
+         every reconnect.
+      */
 
-  mqttClient.on(
-    "reconnect",
-    function(){
+      if(!welcomeSpoken){
 
-      console.log(
-        "MQTT reconnecting..."
-      );
+        speak(
+          "MQTT connected. Ajatron is ready."
+        );
 
-      setMQTTStatus(false);
+        welcomeSpoken = true;
 
-    }
-  );
-
-
-  mqttClient.on(
-    "offline",
-    function(){
-
-      console.log(
-        "MQTT offline"
-      );
-
-      setMQTTStatus(false);
+      }
 
     }
   );
 
 
-  mqttClient.on(
-    "close",
-    function(){
-
-      console.log(
-        "MQTT closed"
-      );
-
-      setMQTTStatus(false);
-
-    }
-  );
-
-
-  mqttClient.on(
-    "error",
-    function(error){
-
-      console.error(
-        "MQTT ERROR:",
-        error
-      );
-
-      setMQTTStatus(false);
-
-    }
-  );
-
+  /* ================= MESSAGE ================= */
 
   mqttClient.on(
     "message",
-    function(topic,message){
+    function(
+      topic,
+      message
+    ){
 
       const text =
         message
           .toString()
           .trim();
 
-      console.log(
-        "MQTT:",
-        topic,
+
+      log(
+        "MQTT " +
+        topic +
+        " → " +
         text
       );
 
 
-      if(topic === CONFIG.STATUS_TOPIC){
+      if(
+        topic ===
+        CONFIG.STATE_TOPIC
+      ){
+
+        handleState(text);
+
+      }
+
+
+      if(
+        topic ===
+        CONFIG.STATUS_TOPIC
+      ){
 
         handleStatus(text);
 
       }
 
+    }
+  );
 
-      if(topic === CONFIG.STATE_TOPIC){
 
-        handleState(text);
+  /* ================= RECONNECT ================= */
 
-      }
+  mqttClient.on(
+    "reconnect",
+    function(){
+
+      setMQTTStatus(false);
+
+      log(
+        "MQTT reconnecting..."
+      );
+
+    }
+  );
+
+
+  /* ================= OFFLINE ================= */
+
+  mqttClient.on(
+    "offline",
+    function(){
+
+      setMQTTStatus(false);
+
+      log(
+        "MQTT offline."
+      );
+
+    }
+  );
+
+
+  /* ================= CLOSE ================= */
+
+  mqttClient.on(
+    "close",
+    function(){
+
+      setMQTTStatus(false);
+
+      log(
+        "MQTT connection closed."
+      );
+
+    }
+  );
+
+
+  /* ================= ERROR ================= */
+
+  mqttClient.on(
+    "error",
+    function(error){
+
+      setMQTTStatus(false);
+
+      log(
+        "MQTT error: " +
+        error.message
+      );
+
+      console.error(
+        "MQTT ERROR:",
+        error
+      );
 
     }
   );
@@ -1554,7 +1892,7 @@ function connectMQTT(){
 
 
 /* =====================================================
-   MQTT PUBLISH
+   PUBLISH COMMAND
 ===================================================== */
 
 function publishCommand(command){
@@ -1564,6 +1902,10 @@ function publishCommand(command){
     !mqttClient.connected
   ){
 
+    log(
+      "Cannot send command. MQTT disconnected."
+    );
+
     speak(
       "MQTT is disconnected. I cannot control the relay."
     );
@@ -1571,12 +1913,6 @@ function publishCommand(command){
     return false;
 
   }
-
-
-  console.log(
-    "SEND:",
-    command
-  );
 
 
   mqttClient.publish(
@@ -1589,19 +1925,34 @@ function publishCommand(command){
   );
 
 
+  log(
+    "COMMAND → " +
+    command
+  );
+
+
   return true;
 
 }
 
 
 /* =====================================================
-   INDIVIDUAL RELAY
+   TOGGLE RELAY
 ===================================================== */
 
 function toggleRelay(n){
 
+  if(
+    n < 1 ||
+    n > 4
+  ){
+    return;
+  }
+
+
   const newState =
     !states[n-1];
+
 
   setRelay(
     n,
@@ -1612,13 +1963,20 @@ function toggleRelay(n){
 }
 
 
+/* =====================================================
+   SET RELAY
+===================================================== */
+
 function setRelay(
   n,
   on,
-  announce=true
+  announce
 ){
 
-  if(n < 1 || n > 4){
+  if(
+    n < 1 ||
+    n > 4
+  ){
     return;
   }
 
@@ -1627,14 +1985,22 @@ function setRelay(
     "RELAY_" +
     n +
     "_" +
-    (on ? "ON" : "OFF");
+    (
+      on
+        ? "ON"
+        : "OFF"
+    );
 
 
   if(
     publishCommand(command)
   ){
 
-    /* Optimistic website update */
+    /*
+       Optimistic display.
+       ESP8266 will send the real state
+       immediately after executing.
+    */
 
     states[n-1] =
       on;
@@ -1648,7 +2014,11 @@ function setRelay(
         "Relay " +
         n +
         " is " +
-        (on ? "ON" : "OFF") +
+        (
+          on
+            ? "ON"
+            : "OFF"
+        ) +
         "."
       );
 
@@ -1676,15 +2046,15 @@ function allRelays(on){
   ){
 
     for(
-      let i=1;
-      i<=4;
+      let i=0;
+      i<4;
       i++
     ){
 
-      states[i-1] =
+      states[i] =
         on;
 
-      draw(i);
+      draw(i+1);
 
     }
 
@@ -1711,25 +2081,36 @@ function draw(n){
       "r" + n
     );
 
+
   if(!box){
     return;
   }
 
 
   const state =
-    box.querySelector(".state");
+    box.querySelector(
+      ".state"
+    );
 
 
-  if(states[n-1]){
+  if(
+    states[n-1]
+  ){
 
-    box.classList.add("on");
+    box.classList.add(
+      "on"
+    );
 
     state.textContent =
       "● ON";
 
-  }else{
+  }
 
-    box.classList.remove("on");
+  else{
+
+    box.classList.remove(
+      "on"
+    );
 
     state.textContent =
       "● OFF";
@@ -1759,6 +2140,10 @@ function handleStatus(text){
 
     setESPStatus(true);
 
+    log(
+      "ESP8266 ONLINE."
+    );
+
   }
 
 
@@ -1770,27 +2155,29 @@ function handleStatus(text){
 
     setESPStatus(false);
 
+    log(
+      "ESP8266 OFFLINE."
+    );
+
   }
 
 }
 
 
 /* =====================================================
-   HANDLE ESP RELAY STATE
+   HANDLE ESP STATE
 ===================================================== */
 
 function handleState(text){
 
   let t =
-    text
-      .trim();
+    text.trim();
 
 
   /*
-     JSON SUPPORT
+     YOUR ESP8266 FORMAT:
 
-     Example:
-     {"relay1":true,"relay2":false}
+     {"r1":0,"r2":1,"r3":0,"r4":1}
   */
 
   try{
@@ -1805,32 +2192,37 @@ function handleState(text){
       i++
     ){
 
-      const possibleKeys = [
-        "relay" + i,
-        "RELAY" + i,
+      const keys = [
         "r" + i,
-        "R" + i
+        "relay" + i,
+        "R" + i,
+        "RELAY" + i
       ];
 
 
       for(
-        const key of possibleKeys
+        const key of keys
       ){
 
         if(
           Object.prototype
             .hasOwnProperty
-            .call(data,key)
+            .call(
+              data,
+              key
+            )
         ){
 
           const value =
             data[key];
+
 
           states[i-1] =
             value === true ||
             value === 1 ||
             String(value)
               .toUpperCase() === "ON";
+
 
           draw(i);
 
@@ -1841,11 +2233,18 @@ function handleState(text){
     }
 
 
+    setESPStatus(true);
+
     return;
 
-  }catch(e){
+  }
 
-    /* Not JSON. Continue below. */
+  catch(error){
+
+    /*
+       Not JSON.
+       Continue with text formats.
+    */
 
   }
 
@@ -1856,9 +2255,7 @@ function handleState(text){
       .replace(/-/g,"_");
 
 
-  /*
-     ALL STATE SUPPORT
-  */
+  /* ALL ON */
 
   if(
     t.includes("ALL_ON")
@@ -1870,7 +2267,9 @@ function handleState(text){
       i++
     ){
 
-      states[i-1] = true;
+      states[i-1] =
+        true;
+
       draw(i);
 
     }
@@ -1879,6 +2278,8 @@ function handleState(text){
 
   }
 
+
+  /* ALL OFF */
 
   if(
     t.includes("ALL_OFF")
@@ -1890,7 +2291,9 @@ function handleState(text){
       i++
     ){
 
-      states[i-1] = false;
+      states[i-1] =
+        false;
+
       draw(i);
 
     }
@@ -1901,53 +2304,10 @@ function handleState(text){
 
 
   /*
-     FORMAT:
-
      RELAY1 ON
      RELAY_1_ON
      R1 ON
-     R1=ON
      1 ON
-  */
-
-
-  for(
-    let i=1;
-    i<=4;
-    i++
-  ){
-
-    const relayRegex =
-      new RegExp(
-        "(?:RELAY[_ ]*|" +
-        "R[_ ]*|" +
-        "\\b)" +
-        i +
-        "\\b[^A-Z]*(ON|OFF)"
-      );
-
-
-    const match =
-      t.match(relayRegex);
-
-
-    if(match){
-
-      states[i-1] =
-        match[1] === "ON";
-
-      draw(i);
-
-    }
-
-  }
-
-
-  /*
-     FORMAT:
-
-     RELAY1:ON
-     RELAY1=ON
   */
 
   for(
@@ -1960,16 +2320,17 @@ function handleState(text){
       new RegExp(
         "(RELAY[_ ]*" +
         i +
-        "|R" +
+        "|R[_ ]*" +
         i +
         ")\\s*[:=]?\\s*ON"
       );
+
 
     const offPattern =
       new RegExp(
         "(RELAY[_ ]*" +
         i +
-        "|R" +
+        "|R[_ ]*" +
         i +
         ")\\s*[:=]?\\s*OFF"
       );
@@ -1979,7 +2340,9 @@ function handleState(text){
       onPattern.test(t)
     ){
 
-      states[i-1] = true;
+      states[i-1] =
+        true;
+
       draw(i);
 
     }
@@ -1989,7 +2352,9 @@ function handleState(text){
       offPattern.test(t)
     ){
 
-      states[i-1] = false;
+      states[i-1] =
+        false;
+
       draw(i);
 
     }
@@ -1998,7 +2363,7 @@ function handleState(text){
 
 
   /*
-     CSV FORMAT:
+     CSV:
 
      ON,OFF,ON,OFF
   */
@@ -2007,24 +2372,16 @@ function handleState(text){
     t.split(",");
 
 
-  if(parts.length === 4){
+  if(
+    parts.length === 4
+  ){
 
-    let valid = true;
-
-    for(
-      const p of parts
-    ){
-
-      if(
-        p.trim() !== "ON" &&
-        p.trim() !== "OFF"
-      ){
-
-        valid = false;
-
-      }
-
-    }
+    const valid =
+      parts.every(
+        part =>
+          part.trim() === "ON" ||
+          part.trim() === "OFF"
+      );
 
 
     if(valid){
@@ -2036,7 +2393,8 @@ function handleState(text){
       ){
 
         states[i] =
-          parts[i].trim() === "ON";
+          parts[i]
+            .trim() === "ON";
 
         draw(i+1);
 
@@ -2050,7 +2408,7 @@ function handleState(text){
 
 
 /* =====================================================
-   VOICE
+   VOICE RECOGNITION
 ===================================================== */
 
 function voice(){
@@ -2081,30 +2439,47 @@ function voice(){
   recognition.interimResults =
     false;
 
+  recognition.continuous =
+    false;
+
   recognition.maxAlternatives =
     5;
 
 
-  document.getElementById("heard").textContent =
-    "🎤 LISTENING...";
+  document
+    .getElementById("heard")
+    .textContent =
+      "🎤 LISTENING...";
 
 
-  document.getElementById("aiReply").textContent =
-    "AI: Listening for your command.";
+  document
+    .getElementById("aiReply")
+    .textContent =
+      "AI: Listening...";
 
 
   recognition.onresult =
     function(event){
 
       const text =
-        event.results[0][0]
+        event
+          .results[0][0]
           .transcript
           .toLowerCase()
           .trim();
 
 
-      document.getElementById("heard").textContent =
-        "HEARD: " + text;
+      document
+        .getElementById("heard")
+        .textContent =
+          "HEARD: " +
+          text;
+
+
+      log(
+        "VOICE → " +
+        text
+      );
 
 
       processVoiceCommand(text);
@@ -2113,10 +2488,19 @@ function voice(){
 
 
   recognition.onerror =
-    function(){
+    function(event){
 
-      document.getElementById("heard").textContent =
-        "Voice error — try again.";
+      document
+        .getElementById("heard")
+        .textContent =
+          "Voice error — try again.";
+
+
+      log(
+        "Voice error: " +
+        event.error
+      );
+
 
       speak(
         "I could not hear the command. Please try again."
@@ -2139,7 +2523,9 @@ function voice(){
 
     recognition.start();
 
-  }catch(error){
+  }
+
+  catch(error){
 
     console.error(error);
 
@@ -2161,36 +2547,34 @@ function processVoiceCommand(text){
 
 
   /*
-     Convert common spoken number words
-     into numbers.
+     WORD NUMBERS
   */
 
   t =
-    t.replace(/\bone\b/g,"1")
-     .replace(/\btwo\b/g,"2")
-     .replace(/\bthree\b/g,"3")
-     .replace(/\bfour\b/g,"4");
+    t
+      .replace(/\bone\b/g,"1")
+      .replace(/\btwo\b/g,"2")
+      .replace(/\bthree\b/g,"3")
+      .replace(/\bfour\b/g,"4");
 
 
   /*
-     Remove common extra words.
+     COMMON SPEECH WORDS
   */
 
   t =
-    t.replace(/\brelay\b/g,"")
-     .replace(/\brelays\b/g,"")
-     .replace(/\bplease\b/g,"")
-     .replace(/\bturn\b/g,"")
-     .replace(/\bswitch\b/g,"")
-     .replace(/\blights?\b/g,"")
-     .replace(/\s+/g," ")
-     .trim();
-
-
-  console.log(
-    "VOICE COMMAND:",
     t
-  );
+      .replace(/\brelay\b/g,"")
+      .replace(/\brelays\b/g,"")
+      .replace(/\bplease\b/g,"")
+      .replace(/\bturn\b/g,"")
+      .replace(/\bswitch\b/g,"")
+      .replace(/\blight\b/g,"")
+      .replace(/\blights\b/g,"")
+      .replace(/\bthe\b/g,"")
+      .replace(/\bon the\b/g,"")
+      .replace(/\s+/g," ")
+      .trim();
 
 
   /*
@@ -2198,8 +2582,8 @@ function processVoiceCommand(text){
   */
 
   if(
-    /\ball\s+(on|one)\b/.test(t) ||
-    t === "all 1"
+    /\ball\s+(on|1)\b/.test(t) ||
+    t === "all"
   ){
 
     allRelays(true);
@@ -2225,17 +2609,20 @@ function processVoiceCommand(text){
 
 
   /*
-     Find ON / OFF.
+     ON / OFF
   */
 
-  let on =
+  const hasON =
     /\bon\b/.test(t);
 
-  let off =
+  const hasOFF =
     /\boff\b/.test(t);
 
 
-  if(!on && !off){
+  if(
+    !hasON &&
+    !hasOFF
+  ){
 
     speak(
       "Please say ON or OFF."
@@ -2246,12 +2633,39 @@ function processVoiceCommand(text){
   }
 
 
-  const desiredState =
-    on;
+  /*
+     If both somehow occur,
+     use the final command word.
+  */
+
+  const lastOn =
+    t.lastIndexOf("on");
+
+  const lastOff =
+    t.lastIndexOf("off");
+
+
+  let desiredState;
+
+  if(
+    lastOff > lastOn
+  ){
+
+    desiredState =
+      false;
+
+  }
+
+  else{
+
+    desiredState =
+      true;
+
+  }
 
 
   /*
-     Remove ON/OFF so only relay numbers remain.
+     Remove command words.
   */
 
   let numberPart =
@@ -2262,50 +2676,44 @@ function processVoiceCommand(text){
 
 
   /*
-     Handle:
-       1 2 3
-       1,2,3
-       134
-       1234
+     Extract relay numbers.
+
+     Examples:
+
+     "1"
+     "1 2 3"
+     "1,2,3"
+     "134"
+     "1234"
   */
 
-  let relayNumbers = [];
+  let relayNumbers =
+    numberPart.match(
+      /[1-4]/g
+    );
 
 
-  /*
-     First find separated numbers.
-  */
+  if(!relayNumbers){
 
-  const matches =
-    numberPart.match(/[1-4]/g);
+    speak(
+      "I could not find a valid relay number."
+    );
 
-
-  if(matches){
-
-    relayNumbers =
-      matches.map(
-        n => parseInt(n)
-      );
+    return;
 
   }
 
 
-  /*
-     Remove duplicates.
-  */
-
   relayNumbers =
-    [...new Set(relayNumbers)];
-
-
-  /*
-     Only relay 1-4 allowed.
-  */
-
-  relayNumbers =
-    relayNumbers.filter(
-      n => n >= 1 && n <= 4
+    relayNumbers.map(
+      Number
     );
+
+
+  relayNumbers =
+    [...new Set(
+      relayNumbers
+    )];
 
 
   if(
@@ -2313,7 +2721,7 @@ function processVoiceCommand(text){
   ){
 
     speak(
-      "I could not find relay one, two, three, or four."
+      "Please say relay one, two, three, or four."
     );
 
     return;
@@ -2322,11 +2730,16 @@ function processVoiceCommand(text){
 
 
   /*
-     Execute every relay.
+     Send each command.
+
+     Your ESP8266 accepts:
+
+     RELAY_1_ON
+     RELAY_2_OFF
+     etc.
   */
 
   let names = [];
-
 
   for(
     const n of relayNumbers
@@ -2345,16 +2758,14 @@ function processVoiceCommand(text){
   }
 
 
-  const stateWord =
-    desiredState
-      ? "ON"
-      : "OFF";
-
-
   speak(
     names.join(", ") +
     " " +
-    stateWord +
+    (
+      desiredState
+        ? "ON"
+        : "OFF"
+    ) +
     "."
   );
 
@@ -2362,7 +2773,7 @@ function processVoiceCommand(text){
 
 
 /* =====================================================
-   INITIAL RELAY DRAW
+   INITIAL DRAW
 ===================================================== */
 
 for(
@@ -2381,8 +2792,8 @@ for(
 ===================================================== */
 
 for(
-  let i=1;
-  i<=70;
+  let i=0;
+  i<70;
   i++
 ){
 
@@ -2412,14 +2823,19 @@ for(
 
 
 /* =====================================================
-   WEBSITE START
+   START
 ===================================================== */
 
+log(
+  "AJATRON HOME COMMUNICATION READY."
+);
+
 console.log(
-  "AJATRON HOME COMMUNICATION READY"
+  "AJATRON READY"
 );
 
 </script>
 
 </body>
 </html>
+```

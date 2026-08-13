@@ -3,35 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>AJATRON | Home Communication</title>
 
-<style>
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 
+<style>
 *{
   box-sizing:border-box;
   margin:0;
   padding:0;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   font-family:Arial,Helvetica,sans-serif;
   background:#02050c;
   color:white;
-  min-height:100vh;
   overflow-x:hidden;
 }
-
-/* BACKGROUND */
 
 body:before{
   content:"";
   position:fixed;
   inset:0;
-  z-index:-5;
+  z-index:-10;
   background:
-    radial-gradient(circle at 70% 20%,#063d78,transparent 30%),
-    radial-gradient(circle at 20% 80%,#001d45,transparent 30%),
+    radial-gradient(circle at 75% 25%,#063d78 0,transparent 28%),
+    radial-gradient(circle at 15% 70%,#001d45 0,transparent 30%),
     #02050c;
 }
 
@@ -39,138 +40,150 @@ body:after{
   content:"";
   position:fixed;
   inset:0;
-  z-index:-4;
-  opacity:.2;
+  z-index:-9;
+  opacity:.25;
   background-image:
     linear-gradient(rgba(0,157,255,.15) 1px,transparent 1px),
     linear-gradient(90deg,rgba(0,157,255,.15) 1px,transparent 1px);
-  background-size:60px 60px;
+  background-size:70px 70px;
+  transform:perspective(700px) rotateX(55deg) scale(1.5);
+  transform-origin:center bottom;
+  animation:gridMove 10s linear infinite;
 }
 
-/* LOGIN */
+@keyframes gridMove{
+  to{background-position:0 70px;}
+}
 
-#login{
+#stars{
   position:fixed;
   inset:0;
-  z-index:999;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#01050c;
+  z-index:-8;
+  pointer-events:none;
 }
 
-.loginBox{
-  width:min(420px,90%);
-  padding:40px;
-  text-align:center;
-  border:1px solid #008fff;
-  border-radius:18px;
-  background:rgba(2,15,30,.92);
-  box-shadow:
-    0 0 30px rgba(0,150,255,.3),
-    inset 0 0 30px rgba(0,100,255,.08);
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:#8eeaff;
+  border-radius:50%;
+  box-shadow:0 0 8px #00bfff;
+  animation:twinkle 2s infinite alternate;
 }
 
-.loginLogo{
-  font-size:38px;
-  font-weight:900;
-  letter-spacing:7px;
-  color:#7eeaff;
-  text-shadow:0 0 20px #009dff;
+@keyframes twinkle{
+  to{
+    opacity:.15;
+    transform:scale(.4);
+  }
 }
 
-.loginBox h2{
-  margin-top:12px;
-  font-size:18px;
-}
-
-.loginBox p{
-  margin:15px 0 25px;
-  color:#789aaa;
-  font-size:12px;
-}
-
-.loginBox input{
+.scan{
+  position:fixed;
+  top:-5px;
+  left:0;
   width:100%;
-  padding:15px;
-  background:#020b16;
-  border:1px solid #007fc9;
-  border-radius:8px;
-  color:white;
-  outline:none;
-  text-align:center;
-  font-size:16px;
+  height:2px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #00cfff,
+    white,
+    #00cfff,
+    transparent
+  );
+  box-shadow:0 0 20px #00cfff;
+  z-index:50;
+  animation:scan 7s linear infinite;
 }
 
-.loginBox button{
-  width:100%;
-  margin-top:15px;
-  padding:14px;
-  border:1px solid #00cfff;
-  border-radius:8px;
-  background:#006fc1;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.loginBox button:hover{
-  background:#0098ed;
-}
-
-#loginMessage{
-  margin-top:15px;
-  min-height:20px;
-  font-size:12px;
+@keyframes scan{
+  to{top:105vh;}
 }
 
 /* HEADER */
 
 header{
-  height:75px;
   position:fixed;
   top:0;
   left:0;
   right:0;
-  z-index:100;
-  background:rgba(0,5,14,.8);
-  backdrop-filter:blur(15px);
-  border-bottom:1px solid rgba(0,174,255,.2);
+  height:78px;
+  z-index:40;
+  background:rgba(0,5,14,.68);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(0,174,255,.16);
 }
 
 .nav{
   height:100%;
+  max-width:1450px;
+  margin:auto;
+  padding:0 35px;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
 }
 
-.logo{
+.logoBox{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.logoMark{
+  width:42px;
+  height:42px;
+  position:relative;
+  filter:drop-shadow(0 0 12px #009dff);
+}
+
+.logoMark:before,
+.logoMark:after{
+  content:"";
+  position:absolute;
+  border-style:solid;
+  border-color:#00aaff transparent transparent transparent;
+}
+
+.logoMark:before{
+  left:3px;
+  top:4px;
+  border-width:20px 18px 0;
+}
+
+.logoMark:after{
+  left:13px;
+  top:15px;
+  border-width:20px 18px 0;
+  transform:rotate(180deg);
+}
+
+.brand{
   font-size:25px;
+  letter-spacing:5px;
   font-weight:900;
-  letter-spacing:6px;
-  color:white;
-  text-shadow:0 0 18px #008fff;
 }
 
-.logo span{
-  color:#00bfff;
+.tag{
+  font-size:8px;
+  letter-spacing:3px;
+  color:#79a9bb;
+  margin-top:3px;
 }
 
-/* MAIN */
-
-main{
-  padding-top:75px;
-}
+/* HERO */
 
 .hero{
-  min-height:580px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  align-items:center;
-  max-width:1300px;
+  min-height:720px;
+  padding:130px 5vw 60px;
+  max-width:1450px;
   margin:auto;
-  padding:50px;
+  display:grid;
+  grid-template-columns:46% 54%;
+  align-items:center;
+  position:relative;
 }
 
 .heroText{
@@ -178,222 +191,328 @@ main{
 }
 
 .kicker{
-  color:#00cfff;
-  letter-spacing:4px;
-  font-size:12px;
+  font-size:13px;
+  letter-spacing:5px;
+  color:#00bfff;
   margin-bottom:15px;
 }
 
-.hero h1{
-  font-size:clamp(55px,8vw,105px);
-  letter-spacing:8px;
-  line-height:.9;
-  background:linear-gradient(90deg,#fff,#9eeaff,#008fff);
+h1{
+  font-size:clamp(62px,8vw,120px);
+  line-height:.85;
+  letter-spacing:7px;
+  margin-bottom:28px;
+  text-shadow:0 0 20px rgba(0,170,255,.35);
+}
+
+h1 span{
+  background:linear-gradient(90deg,#fff,#aeeaff,#008fff);
   -webkit-background-clip:text;
   color:transparent;
 }
 
-.hero h2{
-  margin-top:25px;
-  font-size:35px;
+.heroText h2{
+  font-size:clamp(23px,3vw,43px);
+  line-height:1.1;
+  max-width:650px;
 }
 
-.hero h2 span{
+.heroText h2 b{
   color:#00aaff;
 }
 
-.hero p{
-  max-width:550px;
-  margin-top:20px;
-  color:#91aebb;
+.heroText p{
+  color:#a4bbc8;
   line-height:1.7;
+  max-width:590px;
+  margin:20px 0 28px;
+}
+
+.buttons{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:15px 25px;
+  border:1px solid #008fff;
+  border-radius:7px;
+  background:linear-gradient(135deg,#007fff,#003b75);
+  color:#fff;
+  font-weight:bold;
+  text-decoration:none;
+  box-shadow:0 0 20px rgba(0,145,255,.25);
+  transition:.25s;
+  cursor:pointer;
+}
+
+.btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 0 35px rgba(0,180,255,.5);
+}
+
+.btn.secondary{
+  background:rgba(0,15,30,.7);
 }
 
 /* ROBOT */
 
 .scene{
-  height:450px;
+  height:520px;
   position:relative;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
 }
 
 .planet{
-  width:350px;
-  height:350px;
+  width:440px;
+  height:440px;
   border-radius:50%;
   background:
-    radial-gradient(circle at 35% 30%,#1a4d82,#06172e 55%,#01040b 75%);
+    radial-gradient(circle at 35% 30%,#173f72,#06172e 50%,#01050d 72%);
   box-shadow:
-    0 0 50px #008cff,
-    0 0 110px rgba(0,124,255,.35);
-  animation:planet 6s linear infinite;
+    0 0 40px #008cff,
+    0 0 100px rgba(0,124,255,.4),
+    inset -30px -20px 70px #000;
+  position:absolute;
 }
 
-@keyframes planet{
-  50%{
-    filter:hue-rotate(15deg);
-  }
+.planet:before{
+  content:"";
+  position:absolute;
+  inset:22px;
+  border-radius:50%;
+  border:1px solid rgba(0,205,255,.45);
+  box-shadow:inset 0 0 40px rgba(0,170,255,.4);
+}
+
+.orbit{
+  position:absolute;
+  width:530px;
+  height:170px;
+  border:1px solid rgba(0,180,255,.55);
+  border-radius:50%;
+  transform:rotate(-18deg);
+  animation:orbit 5s linear infinite;
+}
+
+.orbit:after{
+  content:"";
+  position:absolute;
+  left:4%;
+  top:42%;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#8ff;
+  box-shadow:0 0 20px #00d9ff;
+}
+
+@keyframes orbit{
+  to{transform:rotate(342deg);}
 }
 
 .robot{
   position:absolute;
-  width:190px;
-  height:300px;
-  animation:float 3s ease-in-out infinite;
-  filter:drop-shadow(0 0 25px #008fff);
+  width:250px;
+  height:360px;
+  right:5%;
+  bottom:10px;
+  filter:drop-shadow(0 0 28px rgba(0,180,255,.5));
+  animation:robotFloat 3.5s ease-in-out infinite;
 }
 
-@keyframes float{
-  50%{
-    transform:translateY(-12px);
-  }
+@keyframes robotFloat{
+  50%{transform:translateY(-13px);}
 }
 
-.head{
+.rhead{
   position:absolute;
-  left:35px;
-  top:10px;
-  width:120px;
-  height:100px;
+  top:18px;
+  left:55px;
+  width:145px;
+  height:130px;
   border:3px solid #5ee8ff;
-  border-radius:35px;
-  background:linear-gradient(145deg,#dce8ef,#455d6c,#07121c);
+  border-radius:45% 45% 38% 38%;
+  background:linear-gradient(145deg,#dbe8f0,#536b7d 45%,#08121c);
+  box-shadow:inset -25px -15px 35px #03080d,0 0 25px #008fff;
 }
 
-.eye{
+.ear{
   position:absolute;
-  top:40px;
-  width:23px;
-  height:14px;
-  border-radius:50%;
-  background:#00dcff;
-  box-shadow:0 0 20px #00dcff;
-}
-
-.eye.one{
-  left:25px;
-}
-
-.eye.two{
-  right:25px;
-}
-
-.mouth{
-  position:absolute;
-  left:35px;
-  right:35px;
-  bottom:20px;
-  height:10px;
-  border-bottom:3px solid #6ceaff;
-  border-radius:50%;
-}
-
-.body{
-  position:absolute;
-  left:20px;
-  top:120px;
-  width:150px;
-  height:140px;
-  border:3px solid #42ddff;
-  border-radius:30px;
-  background:linear-gradient(145deg,#b9cad3,#304756,#06101a);
-}
-
-.core{
-  position:absolute;
-  left:48px;
-  top:35px;
-  width:50px;
+  top:57px;
+  width:25px;
   height:50px;
+  border:3px solid #38cfff;
+  background:#10293b;
+}
+
+.ear.l{left:35px;}
+.ear.r{right:35px;}
+
+.reye{
+  position:absolute;
+  top:52px;
+  width:29px;
+  height:17px;
+  background:#00d9ff;
+  border-radius:50%;
+  box-shadow:0 0 18px #00d9ff;
+}
+
+.reye.l{left:30px;}
+.reye.r{right:30px;}
+
+.rmouth{
+  position:absolute;
+  left:43px;
+  right:43px;
+  bottom:26px;
+  height:14px;
+  border-bottom:4px solid #67eaff;
+  border-radius:0 0 30px 30px;
+}
+
+.neck{
+  position:absolute;
+  left:94px;
+  top:145px;
+  width:62px;
+  height:30px;
+  background:#102333;
+  border:2px solid #45dfff;
+}
+
+.rbody{
+  position:absolute;
+  left:38px;
+  top:168px;
+  width:174px;
+  height:165px;
+  border:3px solid #3fdaff;
+  border-radius:35px 35px 25px 25px;
+  background:linear-gradient(145deg,#c8d7df,#324859 48%,#07111b);
+  box-shadow:inset -35px -20px 45px #02060b,0 0 30px rgba(0,155,255,.4);
+}
+
+.chest{
+  position:absolute;
+  left:57px;
+  top:42px;
+  width:60px;
+  height:60px;
   border-radius:50%;
   border:3px solid #55eaff;
+  background:#06121d;
   box-shadow:0 0 25px #00cfff;
 }
 
-.core:after{
+.chest:after{
   content:"";
   position:absolute;
-  inset:13px;
+  inset:16px;
   border-radius:50%;
   background:#00d9ff;
-  box-shadow:0 0 20px #00d9ff;
-  animation:pulse 1s infinite alternate;
+  box-shadow:0 0 25px #00d9ff;
+  animation:pulse 1.3s infinite alternate;
 }
 
 @keyframes pulse{
   to{
-    transform:scale(1.3);
-    opacity:.5;
+    transform:scale(1.25);
+    opacity:.55;
   }
 }
 
 .arm{
   position:absolute;
-  top:130px;
-  width:25px;
+  top:190px;
+  width:40px;
+  height:145px;
+  border:3px solid #42dfff;
+  border-radius:25px;
+  background:linear-gradient(#657c8a,#172735);
+}
+
+.arm.l{
+  left:3px;
+  transform:rotate(13deg);
+}
+
+.arm.r{
+  right:3px;
+  transform:rotate(-13deg);
+}
+
+.leg{
+  position:absolute;
+  top:320px;
+  width:52px;
   height:120px;
-  border:3px solid #42ddff;
-  border-radius:20px;
-  background:#233b4a;
+  border:3px solid #39d8ff;
+  border-radius:18px;
+  background:#172a38;
 }
 
-.arm.left{
-  left:0;
-  transform:rotate(10deg);
-}
+.leg.l{left:58px;}
+.leg.r{right:58px;}
 
-.arm.right{
-  right:0;
-  transform:rotate(-10deg);
-}
+/* APPLICATION */
 
-/* CONTROL */
-
-.control{
-  max-width:1100px;
+.section{
+  max-width:1200px;
   margin:auto;
-  padding:40px 25px 80px;
+  padding:45px 35px;
 }
 
-.title{
+.sectionTitle{
   text-align:center;
-  margin-bottom:30px;
+  margin-bottom:35px;
 }
 
-.title small{
-  color:#00cfff;
+.sectionTitle .small{
+  color:#00bfff;
   letter-spacing:4px;
+  font-size:11px;
 }
 
-.title h2{
-  margin-top:10px;
+.sectionTitle h2{
   font-size:32px;
+  margin-top:10px;
 }
 
 .status{
   display:flex;
   justify-content:center;
-  gap:10px;
+  gap:12px;
   flex-wrap:wrap;
-  margin-bottom:25px;
+  margin-bottom:22px;
 }
 
-.statusBox{
-  padding:10px 15px;
-  border:1px solid #075b88;
+.pill{
+  padding:9px 15px;
   border-radius:30px;
-  background:rgba(0,30,50,.6);
+  border:1px solid rgba(0,200,255,.3);
+  background:rgba(0,40,65,.4);
   font-size:11px;
+  letter-spacing:1px;
 }
 
-.online{
-  color:#4dffad;
+.dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#ff405f;
+  box-shadow:0 0 10px #ff405f;
+  margin-right:6px;
 }
 
-.offline{
-  color:#ff607e;
+.dot.online{
+  background:#45ffad;
+  box-shadow:0 0 10px #45ffad;
 }
 
 /* RELAYS */
@@ -401,203 +520,301 @@ main{
 .relays{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:15px;
+  gap:16px;
 }
 
 .relay{
-  padding:25px 18px;
-  border:1px solid #075b88;
-  border-radius:14px;
-  background:rgba(3,18,33,.9);
-  text-align:center;
+  padding:25px;
+  border:1px solid rgba(0,160,255,.3);
+  background:rgba(3,18,33,.85);
+  border-radius:12px;
   transition:.25s;
 }
 
 .relay.on{
   border-color:#00ff9d;
-  box-shadow:0 0 25px rgba(0,255,157,.2);
+  box-shadow:0 0 25px rgba(0,255,157,.18);
 }
 
 .relay h3{
   letter-spacing:2px;
 }
 
-.state{
-  margin:15px 0;
-  color:#ff6682;
-  font-weight:bold;
+.relay .state{
+  margin:14px 0;
+  color:#ff6885;
 }
 
 .relay.on .state{
-  color:#4dffad;
-  text-shadow:0 0 12px #4dffad;
+  color:#50ffb1;
+  text-shadow:0 0 10px #50ffb1;
 }
 
 .relay button{
   width:100%;
-  padding:13px;
-  border:1px solid #008fff;
-  border-radius:8px;
+  padding:12px;
   background:#062a48;
-  color:white;
+  border:1px solid #007fc9;
+  color:#fff;
+  border-radius:7px;
   cursor:pointer;
   font-weight:bold;
 }
 
 .relay button:hover{
-  background:#0078bd;
+  background:#07578a;
 }
-
-/* ALL */
 
 .allButtons{
   display:flex;
+  gap:12px;
   justify-content:center;
-  gap:15px;
-  margin-top:20px;
   flex-wrap:wrap;
-}
-
-.allButtons button{
-  padding:14px 25px;
-  border-radius:8px;
-  border:1px solid #00aaff;
-  color:white;
-  background:#006fc1;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.allButtons button.off{
-  background:#18212a;
+  margin-top:18px;
 }
 
 /* VOICE */
 
 .voice{
-  margin-top:25px;
+  margin-top:18px;
   padding:25px;
-  border:1px solid #075b88;
-  border-radius:14px;
-  background:rgba(3,18,33,.8);
+  border:1px solid rgba(0,170,255,.3);
+  background:linear-gradient(90deg,rgba(0,30,55,.8),rgba(4,12,25,.8));
   text-align:center;
+  border-radius:10px;
 }
 
 .voice button{
-  padding:15px 30px;
-  border-radius:8px;
+  padding:13px 28px;
+  background:#006fc1;
+  color:#fff;
   border:1px solid #00cfff;
+  border-radius:6px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 0 20px rgba(0,160,255,.25);
+}
+
+#heard{
+  color:#7da8b8;
+  font-size:12px;
+  margin-top:12px;
+}
+
+#aiReply{
+  margin-top:12px;
+  color:#00cfff;
+  font-weight:bold;
+  min-height:20px;
+}
+
+/* LOGIN */
+
+#loginScreen{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(circle at 50% 40%,#073c72,#01040a 65%);
+}
+
+.loginBox{
+  width:min(420px,90%);
+  padding:40px 30px;
+  text-align:center;
+  border:1px solid #008fff;
+  border-radius:15px;
+  background:rgba(2,15,30,.92);
+  box-shadow:0 0 50px rgba(0,150,255,.35);
+}
+
+.loginLogo{
+  font-size:36px;
+  font-weight:900;
+  letter-spacing:7px;
+  color:#00cfff;
+  text-shadow:0 0 20px #008fff;
+}
+
+.loginBox h2{
+  margin-top:15px;
+  margin-bottom:8px;
+}
+
+.loginBox p{
+  color:#7799aa;
+  font-size:12px;
+  margin-bottom:25px;
+}
+
+#passwordInput{
+  width:100%;
+  padding:14px;
+  border-radius:7px;
+  border:1px solid #007fc9;
+  background:#020b16;
+  color:white;
+  outline:none;
+  text-align:center;
+  font-size:17px;
+}
+
+#loginButton{
+  width:100%;
+  margin-top:15px;
+  padding:14px;
+  border:1px solid #00cfff;
+  border-radius:7px;
   background:#006fc1;
   color:white;
   font-weight:bold;
   cursor:pointer;
 }
 
-#heard{
+#loginMessage{
   margin-top:15px;
-  color:#8daeba;
+  min-height:20px;
   font-size:13px;
 }
 
-#aiReply{
-  margin-top:12px;
-  color:#00d9ff;
-  font-weight:bold;
+/* FOOTER */
+
+footer{
+  margin-top:50px;
+  padding:35px;
+  text-align:center;
+  border-top:1px solid rgba(0,160,255,.18);
+  background:rgba(0,5,12,.8);
 }
 
-/* LOG */
-
-.log{
-  margin-top:25px;
-  padding:20px;
-  border:1px solid #075b88;
-  border-radius:14px;
-  background:#010a13;
+footer b{
+  letter-spacing:6px;
+  font-size:22px;
 }
 
-.log h3{
-  color:#00cfff;
-  margin-bottom:10px;
-}
-
-#logBox{
-  height:130px;
-  overflow-y:auto;
-  font-family:monospace;
-  font-size:12px;
-  color:#75c9e8;
+footer p{
+  font-size:10px;
+  color:#718b99;
+  letter-spacing:3px;
+  margin-top:9px;
 }
 
 /* MOBILE */
 
-@media(max-width:850px){
+@media(max-width:1050px){
 
   .hero{
     grid-template-columns:1fr;
-    text-align:center;
-    padding:40px 20px;
   }
 
-  .hero p{
+  .heroText{
+    text-align:center;
+  }
+
+  .heroText p{
     margin-left:auto;
     margin-right:auto;
   }
 
+  .buttons{
+    justify-content:center;
+  }
+
   .scene{
-    height:400px;
+    height:470px;
   }
 
   .relays{
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(2,1fr);
   }
-
 }
 
-@media(max-width:500px){
+@media(max-width:700px){
+
+  header{
+    height:64px;
+  }
+
+  .nav{
+    padding:0 16px;
+  }
+
+  .brand{
+    font-size:18px;
+  }
+
+  .logoMark{
+    width:32px;
+    height:32px;
+  }
+
+  .hero{
+    padding-top:100px;
+  }
+
+  .scene{
+    height:390px;
+  }
+
+  .planet{
+    width:300px;
+    height:300px;
+  }
+
+  .orbit{
+    width:350px;
+    height:120px;
+  }
+
+  .robot{
+    transform:scale(.7);
+    right:0;
+    bottom:-25px;
+  }
+}
+
+@media(max-width:470px){
 
   .relays{
     grid-template-columns:1fr;
   }
 
-  .hero h2{
-    font-size:25px;
+  .heroText h1{
+    font-size:55px;
   }
 
+  .heroText h2{
+    font-size:24px;
+  }
 }
-
 </style>
 </head>
 
-
 <body>
 
+<!-- LOGIN -->
 
-<!-- ================= LOGIN ================= -->
-
-<div id="login">
+<div id="loginScreen">
 
   <div class="loginBox">
 
-    <div class="loginLogo">
-      AJATRON
-    </div>
+    <div class="loginLogo">AJATRON</div>
 
-    <h2>
-      HOME COMMUNICATION
-    </h2>
+    <h2>HOME COMMUNICATION</h2>
 
-    <p>
-      Secure system access
-    </p>
+    <p>SECURE SMART HOME ACCESS</p>
 
     <input
-      id="password"
+      id="passwordInput"
       type="password"
-      placeholder="ENTER PASSWORD"
-      onkeydown="if(event.key==='Enter') login()"
+      placeholder="Enter password"
+      autocomplete="off"
     >
 
-    <button onclick="login()">
+    <button id="loginButton" onclick="login()">
       ENTER AJATRON
     </button>
 
@@ -607,77 +824,101 @@ main{
 
 </div>
 
-
-<!-- ================= HEADER ================= -->
+<div id="stars"></div>
+<div class="scan"></div>
 
 <header>
 
   <div class="nav">
 
-    <div class="logo">
-      <span>AJATRON</span>
-      HOME COMMUNICATION
+    <div class="logoBox">
+
+      <div class="logoMark"></div>
+
+      <div>
+
+        <div class="brand">AJATRON</div>
+
+        <div class="tag">
+          SMART • INTELLIGENT • AUTOMATION
+        </div>
+
+      </div>
+
     </div>
 
   </div>
 
 </header>
 
-
-<main>
-
-
-<!-- ================= HERO ================= -->
-
-<section class="hero">
+<section class="hero" id="home">
 
   <div class="heroText">
 
     <div class="kicker">
-      AJATRON SMART SYSTEM
+      AJATRON HOME COMMUNICATION
     </div>
 
     <h1>
-      AJATRON
+      <span>AJATRON</span>
     </h1>
 
     <h2>
       AI SMART HOME
-      <span>CONTROL</span>
+      <b>CONTROL APPLICATION</b>
     </h2>
 
     <p>
-      Control four ESP8266 relays from the website,
-      physical switches, or voice commands.
-      Every relay state is synchronized through MQTT.
+      Control your ESP8266, four relays and physical
+      switches using MQTT and AI voice commands.
     </p>
 
-  </div>
+    <div class="buttons">
 
+      <a class="btn" href="#control">
+        ⚡ OPEN APPLICATION
+      </a>
+
+      <a class="btn secondary" href="#control">
+        🤖 ESP8266 CONTROL
+      </a>
+
+    </div>
+
+  </div>
 
   <div class="scene">
 
     <div class="planet"></div>
+    <div class="orbit"></div>
 
     <div class="robot">
 
-      <div class="head">
+      <div class="ear l"></div>
+      <div class="ear r"></div>
 
-        <div class="eye one"></div>
-        <div class="eye two"></div>
+      <div class="rhead">
 
-        <div class="mouth"></div>
+        <div class="reye l"></div>
+        <div class="reye r"></div>
 
-      </div>
-
-      <div class="body">
-
-        <div class="core"></div>
+        <div class="rmouth"></div>
 
       </div>
 
-      <div class="arm left"></div>
-      <div class="arm right"></div>
+      <div class="neck"></div>
+
+      <div class="rbody">
+
+        <div class="chest"></div>
+
+      </div>
+
+      <div class="arm l"></div>
+      <div class="arm r"></div>
+
+      <div class="leg l"></div>
+      <div class="leg r"></div>
 
     </div>
 
@@ -685,16 +926,13 @@ main{
 
 </section>
 
+<section class="section" id="control">
 
-<!-- ================= CONTROL ================= -->
+  <div class="sectionTitle">
 
-<section class="control">
-
-  <div class="title">
-
-    <small>
+    <div class="small">
       AJATRON HOME CORE
-    </small>
+    </div>
 
     <h2>
       ESP8266 RELAY CONTROL
@@ -702,47 +940,51 @@ main{
 
   </div>
 
-
   <!-- STATUS -->
 
   <div class="status">
 
-    <div class="statusBox">
-      WEBSITE:
-      <span class="online">
-        ONLINE
-      </span>
+    <div class="pill">
+
+      <span id="webDot" class="dot online"></span>
+
+      WEBSITE ONLINE
+
     </div>
 
-    <div class="statusBox">
+    <div class="pill">
+
+      <span id="espDot" class="dot"></span>
+
       ESP8266:
-      <span id="espStatus" class="offline">
-        OFFLINE
-      </span>
+      <span id="espStatus">OFFLINE</span>
+
     </div>
 
-    <div class="statusBox">
+    <div class="pill">
+
+      <span id="mqttDot" class="dot"></span>
+
       MQTT:
-      <span id="mqttStatus" class="offline">
-        DISCONNECTED
-      </span>
+      <span id="mqttStatus">DISCONNECTED</span>
+
+    </div>
+
+    <div class="pill">
+      4 RELAYS • 4 SWITCHES
     </div>
 
   </div>
-
 
   <!-- RELAYS -->
 
   <div class="relays">
 
-
-    <div class="relay" id="relay1">
+    <div class="relay" id="r1">
 
       <h3>RELAY 01</h3>
 
-      <div class="state" id="state1">
-        ● OFF
-      </div>
+      <div class="state">● OFF</div>
 
       <button onclick="toggleRelay(1)">
         ON / OFF
@@ -750,14 +992,11 @@ main{
 
     </div>
 
-
-    <div class="relay" id="relay2">
+    <div class="relay" id="r2">
 
       <h3>RELAY 02</h3>
 
-      <div class="state" id="state2">
-        ● OFF
-      </div>
+      <div class="state">● OFF</div>
 
       <button onclick="toggleRelay(2)">
         ON / OFF
@@ -765,14 +1004,11 @@ main{
 
     </div>
 
-
-    <div class="relay" id="relay3">
+    <div class="relay" id="r3">
 
       <h3>RELAY 03</h3>
 
-      <div class="state" id="state3">
-        ● OFF
-      </div>
+      <div class="state">● OFF</div>
 
       <button onclick="toggleRelay(3)">
         ON / OFF
@@ -780,14 +1016,11 @@ main{
 
     </div>
 
-
-    <div class="relay" id="relay4">
+    <div class="relay" id="r4">
 
       <h3>RELAY 04</h3>
 
-      <div class="state" id="state4">
-        ● OFF
-      </div>
+      <div class="state">● OFF</div>
 
       <button onclick="toggleRelay(4)">
         ON / OFF
@@ -797,32 +1030,32 @@ main{
 
   </div>
 
-
-  <!-- ALL -->
-
   <div class="allButtons">
 
-    <button onclick="allRelays(true)">
+    <button class="btn" onclick="allRelays(true)">
       ⚡ ALL ON
     </button>
 
-    <button class="off" onclick="allRelays(false)">
+    <button class="btn secondary" onclick="allRelays(false)">
       ⛔ ALL OFF
     </button>
 
   </div>
 
-
   <!-- VOICE -->
 
   <div class="voice">
 
-    <button onclick="startVoice()">
-      🎤 START AI VOICE
+    <button onclick="voice()">
+      🎤 START AI VOICE CONTROL
     </button>
 
     <div id="heard">
-      Say: ONE ON, TWO ON, 1 3 ON, 134 ON, ALL ON...
+
+      Say:
+      ONE ON • TWO OFF • THREE ON • FOUR OFF
+      • ONE THREE FOUR ON • ALL ON
+
     </div>
 
     <div id="aiReply">
@@ -831,63 +1064,79 @@ main{
 
   </div>
 
-
-  <!-- LOG -->
-
-  <div class="log">
-
-    <h3>
-      SYSTEM LOG
-    </h3>
-
-    <div id="logBox">
-      AJATRON SYSTEM READY...
-    </div>
-
-  </div>
-
 </section>
 
-</main>
+<footer>
 
+  <b>AJATRON</b>
 
-<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <p>
+    HOME COMMUNICATION SYSTEM
+  </p>
 
+  <p>
+    ESP8266 • MQTT • 4 RELAYS • 4 SWITCHES • AI VOICE
+  </p>
+
+</footer>
 
 <script>
 
 /* =====================================================
-   AJATRON SETTINGS
+   AJATRON CONFIGURATION
 ===================================================== */
 
+const CONFIG = {
 
-/* WEBSITE PASSWORD */
+  /* WEBSITE PASSWORD */
 
-const WEBSITE_PASSWORD = "2627";
-
-
-/* MQTT SETTINGS */
-
-const MQTT_SERVER =
-  "wss://2ed680f152fb4eb39e590ed9803a3a63.s1.eu.hivemq.cloud:8884/mqtt";
-
-const MQTT_USERNAME =
-  "ajatrontest";
-
-const MQTT_PASSWORD =
-  "@Ajatron1234";
+  WEBSITE_PASSWORD: "1234",
 
 
-/* YOUR TOPICS */
+  /* HIVE MQ CLOUD */
 
-const COMMAND_TOPIC =
-  "ajatron/command";
+  MQTT_HOST:
+    "2ed680f152fb4eb39e590ed9803a3a63.s1.eu.hivemq.cloud",
 
-const STATE_TOPIC =
-  "ajatron/state";
+  MQTT_PORT: 8884,
 
-const STATUS_TOPIC =
-  "ajatron/status";
+  MQTT_PATH: "/mqtt",
+
+  MQTT_USERNAME:
+    "ajatrontest",
+
+  MQTT_PASSWORD:
+    "YOUR_HIVEMQ_PASSWORD",
+
+
+  /* MQTT TOPICS */
+
+  COMMAND_TOPIC:
+    "ajatron/command",
+
+  STATE_TOPIC:
+    "ajatron/state",
+
+  STATUS_TOPIC:
+    "ajatron/status"
+
+};
+
+
+/* =====================================================
+   RELAY STATES
+===================================================== */
+
+const states = [
+  false,
+  false,
+  false,
+  false
+];
+
+
+let mqttClient = null;
+let loggedIn = false;
 
 
 /* =====================================================
@@ -897,41 +1146,38 @@ const STATUS_TOPIC =
 function login(){
 
   const password =
-    document.getElementById("password").value;
+    document.getElementById("passwordInput").value;
 
   const message =
     document.getElementById("loginMessage");
 
 
-  if(password === WEBSITE_PASSWORD){
+  if(password === CONFIG.WEBSITE_PASSWORD){
 
-    message.style.color =
-      "#4dffad";
+    loggedIn = true;
 
-    message.textContent =
-      "ACCESS ACCEPTED";
+    document.getElementById("loginScreen").style.display =
+      "none";
 
-
-    speakWelcome();
-
+    speak(
+      "Welcome to Ajatron Home Communication."
+    );
 
     setTimeout(function(){
 
-      document.getElementById("login").style.display =
-        "none";
+      connectMQTT();
 
-    },800);
-
+    },500);
 
   }else{
 
-    message.style.color =
-      "#ff607e";
-
     message.textContent =
-      "YOU ARE REJECTED. PLEASE TRY AGAIN.";
+      "ACCESS REJECTED — PLEASE TRY AGAIN.";
 
-    document.getElementById("password").value =
+    message.style.color =
+      "#ff5577";
+
+    document.getElementById("passwordInput").value =
       "";
 
   }
@@ -939,29 +1185,41 @@ function login(){
 }
 
 
+/* ENTER KEY */
+
+document
+  .getElementById("passwordInput")
+  .addEventListener(
+    "keydown",
+    function(event){
+
+      if(event.key === "Enter"){
+        login();
+      }
+
+    }
+  );
+
+
 /* =====================================================
-   WELCOME VOICE
+   SPEECH OUTPUT
 ===================================================== */
 
-function speakWelcome(){
+function speak(text){
+
+  document.getElementById("aiReply").textContent =
+    "AI: " + text;
 
   if("speechSynthesis" in window){
 
     speechSynthesis.cancel();
 
     const speech =
-      new SpeechSynthesisUtterance(
-        "Welcome to AJATRON Home Communication."
-      );
+      new SpeechSynthesisUtterance(text);
 
-    speech.rate =
-      0.9;
-
-    speech.pitch =
-      1.05;
-
-    speech.volume =
-      1;
+    speech.rate = 0.95;
+    speech.pitch = 1.05;
+    speech.volume = 1;
 
     speechSynthesis.speak(speech);
 
@@ -971,75 +1229,166 @@ function speakWelcome(){
 
 
 /* =====================================================
-   RELAY STATES
+   MQTT STATUS UI
 ===================================================== */
 
-let states =
-[
-  false,
-  false,
-  false,
-  false
-];
+function setMQTTStatus(online){
 
+  const dot =
+    document.getElementById("mqttDot");
 
-/* =====================================================
-   LOG
-===================================================== */
+  const text =
+    document.getElementById("mqttStatus");
 
-function addLog(text){
+  if(online){
 
-  const box =
-    document.getElementById("logBox");
+    dot.classList.add("online");
 
-  const time =
-    new Date().toLocaleTimeString();
+    text.textContent =
+      "CONNECTED";
 
-  box.innerHTML +=
-    "<br>[" +
-    time +
-    "] " +
-    text;
+  }else{
 
-  box.scrollTop =
-    box.scrollHeight;
+    dot.classList.remove("online");
+
+    text.textContent =
+      "DISCONNECTED";
+
+  }
 
 }
 
 
 /* =====================================================
-   MQTT CONNECT
+   ESP STATUS UI
 ===================================================== */
 
-let mqttClient;
+function setESPStatus(online){
 
+  const dot =
+    document.getElementById("espDot");
+
+  const text =
+    document.getElementById("espStatus");
+
+  if(online){
+
+    dot.classList.add("online");
+
+    text.textContent =
+      "ONLINE";
+
+  }else{
+
+    dot.classList.remove("online");
+
+    text.textContent =
+      "OFFLINE";
+
+  }
+
+}
+
+
+/* =====================================================
+   CONNECT MQTT
+===================================================== */
 
 function connectMQTT(){
 
-  addLog(
-    "Connecting to HiveMQ..."
+  if(!loggedIn){
+    return;
+  }
+
+
+  if(
+    !CONFIG.MQTT_PASSWORD ||
+    CONFIG.MQTT_PASSWORD ===
+      "YOUR_HIVEMQ_PASSWORD"
+  ){
+
+    setMQTTStatus(false);
+
+    speak(
+      "Please enter your HiveMQ password in the website code."
+    );
+
+    console.error(
+      "MQTT password has not been configured."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    typeof mqtt === "undefined"
+  ){
+
+    speak(
+      "MQTT library could not be loaded."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    mqttClient &&
+    mqttClient.connected
+  ){
+
+    return;
+
+  }
+
+
+  const clientId =
+    "AJATRON_WEB_" +
+    Math.random()
+      .toString(16)
+      .substring(2);
+
+
+  const url =
+    "wss://" +
+    CONFIG.MQTT_HOST +
+    ":" +
+    CONFIG.MQTT_PORT +
+    CONFIG.MQTT_PATH;
+
+
+  console.log(
+    "Connecting to:",
+    url
   );
 
 
   mqttClient =
     mqtt.connect(
-      MQTT_SERVER,
+      url,
       {
+
+        clientId: clientId,
+
         username:
-          MQTT_USERNAME,
+          CONFIG.MQTT_USERNAME,
 
         password:
-          MQTT_PASSWORD,
+          CONFIG.MQTT_PASSWORD,
 
-        clientId:
-          "AJATRON_WEB_" +
-          Math.random()
-            .toString(16)
-            .substring(2),
+        clean: true,
 
-        clean:true,
+        reconnectPeriod: 3000,
 
-        reconnectPeriod:3000
+        connectTimeout: 10000,
+
+        keepalive: 60,
+
+        protocolVersion: 4
+
       }
     );
 
@@ -1048,36 +1397,122 @@ function connectMQTT(){
     "connect",
     function(){
 
-      document.getElementById(
-        "mqttStatus"
-      ).textContent =
-        "CONNECTED";
+      console.log(
+        "AJATRON MQTT CONNECTED"
+      );
 
+      setMQTTStatus(true);
 
-      document.getElementById(
-        "mqttStatus"
-      ).className =
-        "online";
-
-
-      addLog(
-        "MQTT CONNECTED"
+      speak(
+        "MQTT connected. Ajatron is ready."
       );
 
 
       mqttClient.subscribe(
-        STATE_TOPIC
+        CONFIG.STATE_TOPIC,
+        {qos:0},
+        function(err){
+
+          if(err){
+
+            console.error(
+              "State subscribe error:",
+              err
+            );
+
+          }else{
+
+            console.log(
+              "Subscribed:",
+              CONFIG.STATE_TOPIC
+            );
+
+          }
+
+        }
       );
 
 
       mqttClient.subscribe(
-        STATUS_TOPIC
+        CONFIG.STATUS_TOPIC,
+        {qos:0},
+        function(err){
+
+          if(err){
+
+            console.error(
+              "Status subscribe error:",
+              err
+            );
+
+          }else{
+
+            console.log(
+              "Subscribed:",
+              CONFIG.STATUS_TOPIC
+            );
+
+          }
+
+        }
       );
 
+    }
+  );
 
-      addLog(
-        "Subscribed to state/status"
+
+  mqttClient.on(
+    "reconnect",
+    function(){
+
+      console.log(
+        "MQTT reconnecting..."
       );
+
+      setMQTTStatus(false);
+
+    }
+  );
+
+
+  mqttClient.on(
+    "offline",
+    function(){
+
+      console.log(
+        "MQTT offline"
+      );
+
+      setMQTTStatus(false);
+
+    }
+  );
+
+
+  mqttClient.on(
+    "close",
+    function(){
+
+      console.log(
+        "MQTT closed"
+      );
+
+      setMQTTStatus(false);
+
+    }
+  );
+
+
+  mqttClient.on(
+    "error",
+    function(error){
+
+      console.error(
+        "MQTT ERROR:",
+        error
+      );
+
+      setMQTTStatus(false);
 
     }
   );
@@ -1088,62 +1523,29 @@ function connectMQTT(){
     function(topic,message){
 
       const text =
-        message.toString()
-        .trim()
-        .toUpperCase();
+        message
+          .toString()
+          .trim();
 
-
-      addLog(
-        topic +
-        " → " +
-        text
-      );
-
-
-      processMessage(
+      console.log(
+        "MQTT:",
         topic,
         text
       );
 
-    }
-  );
+
+      if(topic === CONFIG.STATUS_TOPIC){
+
+        handleStatus(text);
+
+      }
 
 
-  mqttClient.on(
-    "error",
-    function(error){
+      if(topic === CONFIG.STATE_TOPIC){
 
-      addLog(
-        "MQTT ERROR"
-      );
+        handleState(text);
 
-      document.getElementById(
-        "mqttStatus"
-      ).textContent =
-        "ERROR";
-
-      document.getElementById(
-        "mqttStatus"
-      ).className =
-        "offline";
-
-    }
-  );
-
-
-  mqttClient.on(
-    "close",
-    function(){
-
-      document.getElementById(
-        "mqttStatus"
-      ).textContent =
-        "DISCONNECTED";
-
-      document.getElementById(
-        "mqttStatus"
-      ).className =
-        "offline";
+      }
 
     }
   );
@@ -1152,45 +1554,48 @@ function connectMQTT(){
 
 
 /* =====================================================
-   SEND COMMAND
+   MQTT PUBLISH
 ===================================================== */
 
-function sendCommand(command){
+function publishCommand(command){
 
   if(
     !mqttClient ||
     !mqttClient.connected
   ){
 
-    addLog(
-      "MQTT NOT CONNECTED"
-    );
-
     speak(
-      "MQTT is not connected."
+      "MQTT is disconnected. I cannot control the relay."
     );
 
-    return;
+    return false;
 
   }
 
 
+  console.log(
+    "SEND:",
+    command
+  );
+
+
   mqttClient.publish(
-    COMMAND_TOPIC,
-    command
+    CONFIG.COMMAND_TOPIC,
+    command,
+    {
+      qos:0,
+      retain:false
+    }
   );
 
 
-  addLog(
-    "COMMAND → " +
-    command
-  );
+  return true;
 
 }
 
 
 /* =====================================================
-   TOGGLE RELAY
+   INDIVIDUAL RELAY
 ===================================================== */
 
 function toggleRelay(n){
@@ -1198,39 +1603,58 @@ function toggleRelay(n){
   const newState =
     !states[n-1];
 
+  setRelay(
+    n,
+    newState,
+    true
+  );
+
+}
+
+
+function setRelay(
+  n,
+  on,
+  announce=true
+){
+
+  if(n < 1 || n > 4){
+    return;
+  }
+
 
   const command =
+    "RELAY_" +
     n +
-    (newState
-      ? " ON"
-      : " OFF");
+    "_" +
+    (on ? "ON" : "OFF");
 
 
-  sendCommand(
-    command
-  );
+  if(
+    publishCommand(command)
+  ){
+
+    /* Optimistic website update */
+
+    states[n-1] =
+      on;
+
+    draw(n);
 
 
-  /*
-   Website changes immediately.
-   ESP8266 will send the real state
-   back through ajatron/state.
-  */
+    if(announce){
 
-  updateRelay(
-    n,
-    newState
-  );
+      speak(
+        "Relay " +
+        n +
+        " is " +
+        (on ? "ON" : "OFF") +
+        "."
+      );
 
+    }
 
-  speak(
-    "Relay " +
-    n +
-    " is " +
-    (newState
-      ? "ON"
-      : "OFF")
-  );
+  }
 
 }
 
@@ -1243,73 +1667,69 @@ function allRelays(on){
 
   const command =
     on
-      ? "ALL ON"
-      : "ALL OFF";
+      ? "ALL_ON"
+      : "ALL_OFF";
 
 
-  sendCommand(
-    command
-  );
-
-
-  for(
-    let i=1;
-    i<=4;
-    i++
+  if(
+    publishCommand(command)
   ){
 
-    updateRelay(
-      i,
+    for(
+      let i=1;
+      i<=4;
+      i++
+    ){
+
+      states[i-1] =
+        on;
+
+      draw(i);
+
+    }
+
+
+    speak(
       on
+        ? "All four relays are ON."
+        : "All four relays are OFF."
     );
 
   }
-
-
-  speak(
-    on
-      ? "All four relays are ON."
-      : "All four relays are OFF."
-  );
 
 }
 
 
 /* =====================================================
-   UPDATE WEBSITE
+   DRAW RELAY
 ===================================================== */
 
-function updateRelay(n,on){
-
-  states[n-1] =
-    on;
-
+function draw(n){
 
   const box =
     document.getElementById(
-      "relay" + n
+      "r" + n
     );
+
+  if(!box){
+    return;
+  }
+
 
   const state =
-    document.getElementById(
-      "state" + n
-    );
+    box.querySelector(".state");
 
 
-  if(on){
+  if(states[n-1]){
 
-    box.classList.add(
-      "on"
-    );
+    box.classList.add("on");
 
     state.textContent =
       "● ON";
 
   }else{
 
-    box.classList.remove(
-      "on"
-    );
+    box.classList.remove("on");
 
     state.textContent =
       "● OFF";
@@ -1320,31 +1740,138 @@ function updateRelay(n,on){
 
 
 /* =====================================================
-   PROCESS ESP8266 STATE
+   HANDLE ESP STATUS
 ===================================================== */
 
-function processMessage(
-  topic,
-  text
-){
+function handleStatus(text){
 
-  if(topic === STATUS_TOPIC){
+  const t =
+    text
+      .toUpperCase()
+      .trim();
 
-    if(
-      text.includes("ONLINE") ||
-      text.includes("CONNECTED") ||
-      text === "ON"
+
+  if(
+    t.includes("ONLINE") ||
+    t.includes("CONNECTED") ||
+    t === "1"
+  ){
+
+    setESPStatus(true);
+
+  }
+
+
+  if(
+    t.includes("OFFLINE") ||
+    t.includes("DISCONNECTED") ||
+    t === "0"
+  ){
+
+    setESPStatus(false);
+
+  }
+
+}
+
+
+/* =====================================================
+   HANDLE ESP RELAY STATE
+===================================================== */
+
+function handleState(text){
+
+  let t =
+    text
+      .trim();
+
+
+  /*
+     JSON SUPPORT
+
+     Example:
+     {"relay1":true,"relay2":false}
+  */
+
+  try{
+
+    const data =
+      JSON.parse(t);
+
+
+    for(
+      let i=1;
+      i<=4;
+      i++
     ){
 
-      document.getElementById(
-        "espStatus"
-      ).textContent =
-        "ONLINE";
+      const possibleKeys = [
+        "relay" + i,
+        "RELAY" + i,
+        "r" + i,
+        "R" + i
+      ];
 
-      document.getElementById(
-        "espStatus"
-      ).className =
-        "online";
+
+      for(
+        const key of possibleKeys
+      ){
+
+        if(
+          Object.prototype
+            .hasOwnProperty
+            .call(data,key)
+        ){
+
+          const value =
+            data[key];
+
+          states[i-1] =
+            value === true ||
+            value === 1 ||
+            String(value)
+              .toUpperCase() === "ON";
+
+          draw(i);
+
+        }
+
+      }
+
+    }
+
+
+    return;
+
+  }catch(e){
+
+    /* Not JSON. Continue below. */
+
+  }
+
+
+  t =
+    t
+      .toUpperCase()
+      .replace(/-/g,"_");
+
+
+  /*
+     ALL STATE SUPPORT
+  */
+
+  if(
+    t.includes("ALL_ON")
+  ){
+
+    for(
+      let i=1;
+      i<=4;
+      i++
+    ){
+
+      states[i-1] = true;
+      draw(i);
 
     }
 
@@ -1353,7 +1880,20 @@ function processMessage(
   }
 
 
-  if(topic !== STATE_TOPIC){
+  if(
+    t.includes("ALL_OFF")
+  ){
+
+    for(
+      let i=1;
+      i<=4;
+      i++
+    ){
+
+      states[i-1] = false;
+      draw(i);
+
+    }
 
     return;
 
@@ -1361,102 +1901,148 @@ function processMessage(
 
 
   /*
-    Expected state messages:
+     FORMAT:
 
-    1 ON
-    1 OFF
-    2 ON
-    2 OFF
-    3 ON
-    3 OFF
-    4 ON
-    4 OFF
-
-    OR
-
-    RELAY1 ON
-    RELAY1 OFF
+     RELAY1 ON
+     RELAY_1_ON
+     R1 ON
+     R1=ON
+     1 ON
   */
 
 
-  const match =
-    text.match(
-      /(?:RELAY\s*)?([1-4])\s*[:=-]?\s*(ON|OFF)/
-    );
+  for(
+    let i=1;
+    i<=4;
+    i++
+  ){
 
-
-  if(match){
-
-    const relay =
-      parseInt(
-        match[1]
+    const relayRegex =
+      new RegExp(
+        "(?:RELAY[_ ]*|" +
+        "R[_ ]*|" +
+        "\\b)" +
+        i +
+        "\\b[^A-Z]*(ON|OFF)"
       );
 
-    const on =
-      match[2] === "ON";
+
+    const match =
+      t.match(relayRegex);
 
 
-    updateRelay(
-      relay,
-      on
-    );
+    if(match){
 
+      states[i-1] =
+        match[1] === "ON";
 
-    document.getElementById(
-      "espStatus"
-    ).textContent =
-      "ONLINE";
+      draw(i);
 
-    document.getElementById(
-      "espStatus"
-    ).className =
-      "online";
-
-    return;
+    }
 
   }
 
 
-  if(
-    text === "ALL ON"
+  /*
+     FORMAT:
+
+     RELAY1:ON
+     RELAY1=ON
+  */
+
+  for(
+    let i=1;
+    i<=4;
+    i++
   ){
 
-    for(
-      let i=1;
-      i<=4;
-      i++
+    const onPattern =
+      new RegExp(
+        "(RELAY[_ ]*" +
+        i +
+        "|R" +
+        i +
+        ")\\s*[:=]?\\s*ON"
+      );
+
+    const offPattern =
+      new RegExp(
+        "(RELAY[_ ]*" +
+        i +
+        "|R" +
+        i +
+        ")\\s*[:=]?\\s*OFF"
+      );
+
+
+    if(
+      onPattern.test(t)
     ){
 
-      updateRelay(
-        i,
-        true
-      );
+      states[i-1] = true;
+      draw(i);
 
     }
 
-    return;
+
+    if(
+      offPattern.test(t)
+    ){
+
+      states[i-1] = false;
+      draw(i);
+
+    }
 
   }
 
 
-  if(
-    text === "ALL OFF"
-  ){
+  /*
+     CSV FORMAT:
+
+     ON,OFF,ON,OFF
+  */
+
+  const parts =
+    t.split(",");
+
+
+  if(parts.length === 4){
+
+    let valid = true;
 
     for(
-      let i=1;
-      i<=4;
-      i++
+      const p of parts
     ){
 
-      updateRelay(
-        i,
-        false
-      );
+      if(
+        p.trim() !== "ON" &&
+        p.trim() !== "OFF"
+      ){
+
+        valid = false;
+
+      }
 
     }
 
-    return;
+
+    if(valid){
+
+      for(
+        let i=0;
+        i<4;
+        i++
+      ){
+
+        states[i] =
+          parts[i].trim() === "ON";
+
+        draw(i+1);
+
+      }
+
+    }
 
   }
 
@@ -1464,58 +2050,17 @@ function processMessage(
 
 
 /* =====================================================
-   AI SPEAK
+   VOICE
 ===================================================== */
 
-function speak(text){
+function voice(){
 
-  document.getElementById(
-    "aiReply"
-  ).textContent =
-    "AI: " + text;
-
-
-  if(
-    "speechSynthesis" in window
-  ){
-
-    speechSynthesis.cancel();
-
-    const speech =
-      new SpeechSynthesisUtterance(
-        text
-      );
-
-    speech.rate =
-      0.95;
-
-    speech.pitch =
-      1.05;
-
-    speech.volume =
-      1;
-
-    speechSynthesis.speak(
-      speech
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   VOICE CONTROL
-===================================================== */
-
-function startVoice(){
-
-  const Recognition =
+  const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
 
-  if(!Recognition){
+  if(!SpeechRecognition){
 
     speak(
       "Voice recognition is not supported. Please use Google Chrome."
@@ -1527,7 +2072,7 @@ function startVoice(){
 
 
   const recognition =
-    new Recognition();
+    new SpeechRecognition();
 
 
   recognition.lang =
@@ -1536,20 +2081,16 @@ function startVoice(){
   recognition.interimResults =
     false;
 
-  recognition.continuous =
-    false;
-
   recognition.maxAlternatives =
     5;
 
 
-  document.getElementById(
-    "heard"
-  ).textContent =
+  document.getElementById("heard").textContent =
     "🎤 LISTENING...";
 
 
-  recognition.start();
+  document.getElementById("aiReply").textContent =
+    "AI: Listening for your command.";
 
 
   recognition.onresult =
@@ -1557,26 +2098,16 @@ function startVoice(){
 
       const text =
         event.results[0][0]
-        .transcript
-        .toLowerCase()
-        .trim();
+          .transcript
+          .toLowerCase()
+          .trim();
 
 
-      document.getElementById(
-        "heard"
-      ).textContent =
+      document.getElementById("heard").textContent =
         "HEARD: " + text;
 
 
-      addLog(
-        "VOICE → " +
-        text
-      );
-
-
-      processVoice(
-        text
-      );
+      processVoiceCommand(text);
 
     };
 
@@ -1584,12 +2115,35 @@ function startVoice(){
   recognition.onerror =
     function(){
 
-      document.getElementById(
-        "heard"
-      ).textContent =
-        "Voice error. Try again.";
+      document.getElementById("heard").textContent =
+        "Voice error — try again.";
+
+      speak(
+        "I could not hear the command. Please try again."
+      );
 
     };
+
+
+  recognition.onend =
+    function(){
+
+      console.log(
+        "Voice recognition ended."
+      );
+
+    };
+
+
+  try{
+
+    recognition.start();
+
+  }catch(error){
+
+    console.error(error);
+
+  }
 
 }
 
@@ -1598,15 +2152,54 @@ function startVoice(){
    VOICE COMMAND PROCESSOR
 ===================================================== */
 
-function processVoice(text){
+function processVoiceCommand(text){
+
+  let t =
+    text
+      .toLowerCase()
+      .trim();
+
 
   /*
-    ALL ON
+     Convert common spoken number words
+     into numbers.
+  */
+
+  t =
+    t.replace(/\bone\b/g,"1")
+     .replace(/\btwo\b/g,"2")
+     .replace(/\bthree\b/g,"3")
+     .replace(/\bfour\b/g,"4");
+
+
+  /*
+     Remove common extra words.
+  */
+
+  t =
+    t.replace(/\brelay\b/g,"")
+     .replace(/\brelays\b/g,"")
+     .replace(/\bplease\b/g,"")
+     .replace(/\bturn\b/g,"")
+     .replace(/\bswitch\b/g,"")
+     .replace(/\blights?\b/g,"")
+     .replace(/\s+/g," ")
+     .trim();
+
+
+  console.log(
+    "VOICE COMMAND:",
+    t
+  );
+
+
+  /*
+     ALL ON
   */
 
   if(
-    text.includes("all on") ||
-    text.includes("all one")
+    /\ball\s+(on|one)\b/.test(t) ||
+    t === "all 1"
   ){
 
     allRelays(true);
@@ -1617,11 +2210,11 @@ function processVoice(text){
 
 
   /*
-    ALL OFF
+     ALL OFF
   */
 
   if(
-    text.includes("all off")
+    /\ball\s+off\b/.test(t)
   ){
 
     allRelays(false);
@@ -1631,123 +2224,21 @@ function processVoice(text){
   }
 
 
-  let numbers = [];
-
-
   /*
-    WORD NUMBERS
+     Find ON / OFF.
   */
 
-  if(
-    /\bone\b/.test(text)
-  )
-    numbers.push(1);
+  let on =
+    /\bon\b/.test(t);
+
+  let off =
+    /\boff\b/.test(t);
 
 
-  if(
-    /\btwo\b/.test(text)
-  )
-    numbers.push(2);
-
-
-  if(
-    /\bthree\b/.test(text)
-  )
-    numbers.push(3);
-
-
-  if(
-    /\bfour\b/.test(text)
-  )
-    numbers.push(4);
-
-
-  /*
-    DIGIT COMMANDS
-
-    1
-    2
-    3
-    4
-  */
-
-  if(
-    /\b1\b/.test(text)
-  )
-    numbers.push(1);
-
-
-  if(
-    /\b2\b/.test(text)
-  )
-    numbers.push(2);
-
-
-  if(
-    /\b3\b/.test(text)
-  )
-    numbers.push(3);
-
-
-  if(
-    /\b4\b/.test(text)
-  )
-    numbers.push(4);
-
-
-  /*
-    COMMANDS LIKE:
-
-    134 ON
-    1234 ON
-    341 ON
-  */
-
-  const compact =
-    text.match(
-      /\b([1-4]{2,4})\s*(on|off)\b/
-    );
-
-
-  if(compact){
-
-    numbers = [];
-
-    const digits =
-      compact[1];
-
-    for(
-      const digit of digits
-    ){
-
-      const n =
-        parseInt(digit);
-
-      if(
-        !numbers.includes(n)
-      ){
-
-        numbers.push(n);
-
-      }
-
-    }
-
-  }
-
-
-  /*
-    REMOVE DUPLICATES
-  */
-
-  numbers =
-    [...new Set(numbers)];
-
-
-  if(numbers.length === 0){
+  if(!on && !off){
 
     speak(
-      "I did not understand the relay number."
+      "Please say ON or OFF."
     );
 
     return;
@@ -1755,34 +2246,74 @@ function processVoice(text){
   }
 
 
+  const desiredState =
+    on;
+
+
   /*
-    ON
+     Remove ON/OFF so only relay numbers remain.
   */
 
+  let numberPart =
+    t
+      .replace(/\bon\b/g,"")
+      .replace(/\boff\b/g,"")
+      .trim();
+
+
+  /*
+     Handle:
+       1 2 3
+       1,2,3
+       134
+       1234
+  */
+
+  let relayNumbers = [];
+
+
+  /*
+     First find separated numbers.
+  */
+
+  const matches =
+    numberPart.match(/[1-4]/g);
+
+
+  if(matches){
+
+    relayNumbers =
+      matches.map(
+        n => parseInt(n)
+      );
+
+  }
+
+
+  /*
+     Remove duplicates.
+  */
+
+  relayNumbers =
+    [...new Set(relayNumbers)];
+
+
+  /*
+     Only relay 1-4 allowed.
+  */
+
+  relayNumbers =
+    relayNumbers.filter(
+      n => n >= 1 && n <= 4
+    );
+
+
   if(
-    /\bon\b/.test(text)
+    relayNumbers.length === 0
   ){
 
-    for(
-      const n of numbers
-    ){
-
-      sendCommand(
-        n + " ON"
-      );
-
-      updateRelay(
-        n,
-        true
-      );
-
-    }
-
-
     speak(
-      "Relay " +
-      numbers.join(", ") +
-      " ON."
+      "I could not find relay one, two, three, or four."
     );
 
     return;
@@ -1791,52 +2322,102 @@ function processVoice(text){
 
 
   /*
-    OFF
+     Execute every relay.
   */
 
-  if(
-    /\boff\b/.test(text)
+  let names = [];
+
+
+  for(
+    const n of relayNumbers
   ){
 
-    for(
-      const n of numbers
-    ){
-
-      sendCommand(
-        n + " OFF"
-      );
-
-      updateRelay(
-        n,
-        false
-      );
-
-    }
-
-
-    speak(
-      "Relay " +
-      numbers.join(", ") +
-      " OFF."
+    setRelay(
+      n,
+      desiredState,
+      false
     );
 
-    return;
+    names.push(
+      "relay " + n
+    );
 
   }
+
+
+  const stateWord =
+    desiredState
+      ? "ON"
+      : "OFF";
 
 
   speak(
-    "Please say ON or OFF."
+    names.join(", ") +
+    " " +
+    stateWord +
+    "."
   );
 
 }
 
 
 /* =====================================================
-   START MQTT
+   INITIAL RELAY DRAW
 ===================================================== */
 
-connectMQTT();
+for(
+  let i=1;
+  i<=4;
+  i++
+){
+
+  draw(i);
+
+}
+
+
+/* =====================================================
+   STARS
+===================================================== */
+
+for(
+  let i=1;
+  i<=70;
+  i++
+){
+
+  const star =
+    document.createElement("i");
+
+  star.className =
+    "star";
+
+  star.style.left =
+    Math.random()*100 +
+    "%";
+
+  star.style.top =
+    Math.random()*100 +
+    "%";
+
+  star.style.animationDelay =
+    Math.random()*2 +
+    "s";
+
+  document
+    .getElementById("stars")
+    .appendChild(star);
+
+}
+
+
+/* =====================================================
+   WEBSITE START
+===================================================== */
+
+console.log(
+  "AJATRON HOME COMMUNICATION READY"
+);
 
 </script>
 

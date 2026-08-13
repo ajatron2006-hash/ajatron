@@ -1,42 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AJATRON | Home Communication</title>
 
-<title>AJATRON HOME COMMUNICATION</title>
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 
 <style>
-
 *{
   box-sizing:border-box;
   margin:0;
   padding:0;
 }
 
-html{
-  scroll-behavior:smooth;
-}
-
 body{
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:Arial,sans-serif;
   background:#02050c;
   color:white;
-  overflow-x:hidden;
+  min-height:100vh;
 }
-
-/* ================= BACKGROUND ================= */
 
 body:before{
   content:"";
   position:fixed;
   inset:0;
-  z-index:-10;
-
+  z-index:-2;
   background:
-    radial-gradient(circle at 75% 20%,#064b8c 0,transparent 30%),
-    radial-gradient(circle at 15% 70%,#001d45 0,transparent 35%),
+    radial-gradient(circle at 75% 20%,#063d78,transparent 30%),
+    radial-gradient(circle at 15% 75%,#001d45,transparent 30%),
     #02050c;
 }
 
@@ -44,1359 +36,305 @@ body:after{
   content:"";
   position:fixed;
   inset:0;
-  z-index:-9;
-  opacity:.22;
-
+  z-index:-1;
+  opacity:.2;
   background-image:
-    linear-gradient(rgba(0,157,255,.18) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,157,255,.18) 1px,transparent 1px);
-
-  background-size:70px 70px;
-
-  transform:
-    perspective(700px)
-    rotateX(55deg)
-    scale(1.5);
-
-  transform-origin:center bottom;
-
-  animation:gridMove 10s linear infinite;
+    linear-gradient(rgba(0,157,255,.15) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,157,255,.15) 1px,transparent 1px);
+  background-size:60px 60px;
 }
 
-@keyframes gridMove{
-
-  to{
-    background-position:0 70px;
-  }
-
-}
-
-/* ================= STARS ================= */
-
-#stars{
-  position:fixed;
-  inset:0;
-  z-index:-8;
-  pointer-events:none;
-}
-
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-
-  background:#8eeaff;
-
-  border-radius:50%;
-
-  box-shadow:
-    0 0 8px #00bfff;
-
-  animation:
-    twinkle 2s infinite alternate;
-}
-
-@keyframes twinkle{
-
-  to{
-    opacity:.1;
-    transform:scale(.3);
-  }
-
-}
-
-/* ================= SCAN ================= */
-
-.scan{
-  position:fixed;
-  top:-5px;
-  left:0;
-
-  width:100%;
-  height:2px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #00cfff,
-      white,
-      #00cfff,
-      transparent
-    );
-
-  box-shadow:
-    0 0 20px #00cfff;
-
-  z-index:100;
-
-  animation:
-    scan 7s linear infinite;
-}
-
-@keyframes scan{
-
-  to{
-    top:105vh;
-  }
-
-}
-
-/* ==================================================
-   LOGIN
-================================================== */
-
-#loginScreen{
-
-  position:fixed;
-
-  inset:0;
-
-  z-index:90;
-
+header{
+  height:70px;
   display:flex;
-
   align-items:center;
-
   justify-content:center;
+  border-bottom:1px solid #075d8c;
+  background:rgba(0,5,14,.85);
+  position:sticky;
+  top:0;
+  z-index:10;
+}
 
-  padding:20px;
+.logo{
+  font-size:28px;
+  font-weight:bold;
+  letter-spacing:6px;
+  color:#00cfff;
+  text-shadow:0 0 20px #008cff;
+}
 
-  background:
-    radial-gradient(
-      circle at center,
-      rgba(0,80,150,.35),
-      rgba(0,0,0,.96)
-    );
+.login{
+  position:fixed;
+  inset:0;
+  background:#02050c;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
 }
 
 .loginBox{
-
-  width:min(430px,100%);
-
-  padding:45px 35px;
-
+  width:90%;
+  max-width:420px;
+  padding:35px;
+  border:1px solid #008fff;
+  border-radius:15px;
+  background:rgba(3,18,33,.95);
+  box-shadow:0 0 40px rgba(0,150,255,.3);
   text-align:center;
-
-  background:
-    rgba(2,15,30,.9);
-
-  border:
-    1px solid rgba(0,200,255,.5);
-
-  border-radius:20px;
-
-  box-shadow:
-    0 0 40px rgba(0,150,255,.35),
-    inset 0 0 40px rgba(0,100,200,.08);
-
-  backdrop-filter:blur(15px);
-
-  animation:
-    loginFloat 3s ease-in-out infinite;
 }
 
-@keyframes loginFloat{
-
-  50%{
-    transform:translateY(-6px);
-  }
-
-}
-
-.loginLogo{
-
-  font-size:40px;
-
-  font-weight:900;
-
-  letter-spacing:8px;
-
+.loginBox h1{
   color:#00cfff;
-
-  text-shadow:
-    0 0 20px #008fff;
-}
-
-.loginSubtitle{
-
-  margin-top:8px;
-
-  font-size:11px;
-
-  letter-spacing:3px;
-
-  color:#789aaa;
-}
-
-.loginBox h2{
-
-  margin-top:35px;
-
-  font-size:20px;
-
-  letter-spacing:2px;
-}
-
-#passwordInput{
-
-  width:100%;
-
-  margin-top:22px;
-
-  padding:15px;
-
-  border-radius:8px;
-
-  border:
-    1px solid #008fff;
-
-  outline:none;
-
-  background:
-    rgba(0,20,40,.8);
-
-  color:white;
-
-  font-size:16px;
-
-  text-align:center;
-}
-
-#passwordInput:focus{
-
-  box-shadow:
-    0 0 20px rgba(0,180,255,.4);
-}
-
-.loginButton{
-
-  width:100%;
-
-  margin-top:15px;
-
-  padding:14px;
-
-  border:none;
-
-  border-radius:8px;
-
-  cursor:pointer;
-
-  font-weight:bold;
-
-  color:white;
-
-  background:
-    linear-gradient(
-      135deg,
-      #008cff,
-      #003b75
-    );
-
-  box-shadow:
-    0 0 20px rgba(0,150,255,.3);
-}
-
-.loginButton:hover{
-
-  box-shadow:
-    0 0 35px rgba(0,180,255,.6);
-
-  transform:translateY(-2px);
-}
-
-#loginMessage{
-
-  min-height:25px;
-
-  margin-top:18px;
-
-  font-size:13px;
-
-  color:#ff6885;
-}
-
-/* ==================================================
-   MAIN
-================================================== */
-
-#mainSite{
-
-  display:none;
-
-}
-
-/* ================= HEADER ================= */
-
-header{
-
-  position:fixed;
-
-  top:0;
-  left:0;
-  right:0;
-
-  height:78px;
-
-  z-index:40;
-
-  background:
-    rgba(0,5,14,.72);
-
-  backdrop-filter:
-    blur(15px);
-
-  border-bottom:
-    1px solid rgba(0,174,255,.2);
-}
-
-.nav{
-
-  height:100%;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-}
-
-.brand{
-
-  font-size:25px;
-
-  font-weight:900;
-
-  letter-spacing:6px;
-
-  color:white;
-
-  text-shadow:
-    0 0 15px #008fff;
-}
-
-.tag{
-
-  text-align:center;
-
-  font-size:8px;
-
   letter-spacing:4px;
-
-  color:#79a9bb;
-
-  margin-top:4px;
+  margin-bottom:10px;
 }
 
-/* ================= HERO ================= */
-
-.hero{
-
-  min-height:720px;
-
-  padding:
-    130px 5vw 60px;
-
-  max-width:1450px;
-
-  margin:auto;
-
-  display:grid;
-
-  grid-template-columns:
-    46% 54%;
-
-  align-items:center;
-}
-
-.heroText{
-
-  z-index:2;
-}
-
-.kicker{
-
-  font-size:12px;
-
-  letter-spacing:5px;
-
-  color:#00bfff;
-
-  margin-bottom:15px;
-}
-
-h1{
-
-  font-size:
-    clamp(60px,8vw,120px);
-
-  line-height:.85;
-
-  letter-spacing:7px;
-
-  margin-bottom:28px;
-
-  text-shadow:
-    0 0 25px rgba(0,170,255,.4);
-}
-
-h1 span{
-
-  background:
-    linear-gradient(
-      90deg,
-      #ffffff,
-      #aeeaff,
-      #008fff
-    );
-
-  -webkit-background-clip:text;
-
-  color:transparent;
-}
-
-.heroText h2{
-
-  font-size:
-    clamp(23px,3vw,43px);
-
-  line-height:1.1;
-}
-
-.heroText h2 b{
-
-  color:#00aaff;
-}
-
-.heroText p{
-
-  color:#a4bbc8;
-
-  line-height:1.7;
-
-  max-width:590px;
-
-  margin:
-    20px 0 28px;
-}
-
-.buttons{
-
-  display:flex;
-
-  gap:16px;
-
-  flex-wrap:wrap;
-}
-
-.btn{
-
-  padding:
-    14px 23px;
-
-  border:
-    1px solid #008fff;
-
-  border-radius:7px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #007fff,
-      #003b75
-    );
-
-  color:white;
-
-  font-weight:bold;
-
-  cursor:pointer;
-
-  box-shadow:
-    0 0 20px rgba(0,145,255,.25);
-
-  transition:.25s;
-}
-
-.btn:hover{
-
-  transform:
-    translateY(-3px);
-
-  box-shadow:
-    0 0 35px rgba(0,180,255,.5);
-}
-
-.btn.secondary{
-
-  background:
-    rgba(0,15,30,.7);
-}
-
-/* ==================================================
-   ROBOT
-================================================== */
-
-.scene{
-
-  height:520px;
-
-  position:relative;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-}
-
-.planet{
-
-  width:440px;
-  height:440px;
-
-  border-radius:50%;
-
-  background:
-    radial-gradient(
-      circle at 35% 30%,
-      #173f72,
-      #06172e 50%,
-      #01050d 72%
-    );
-
-  box-shadow:
-    0 0 40px #008cff,
-    0 0 100px rgba(0,124,255,.4),
-    inset -30px -20px 70px #000;
-
-  position:absolute;
-}
-
-.planet:before{
-
-  content:"";
-
-  position:absolute;
-
-  inset:22px;
-
-  border-radius:50%;
-
-  border:
-    1px solid rgba(0,205,255,.45);
-
-  box-shadow:
-    inset 0 0 40px rgba(0,170,255,.4);
-}
-
-.orbit{
-
-  position:absolute;
-
-  width:530px;
-  height:170px;
-
-  border:
-    1px solid rgba(0,180,255,.55);
-
-  border-radius:50%;
-
-  transform:
-    rotate(-18deg);
-
-  animation:
-    orbit 5s linear infinite;
-}
-
-.orbit:after{
-
-  content:"";
-
-  position:absolute;
-
-  left:4%;
-  top:42%;
-
-  width:9px;
-  height:9px;
-
-  border-radius:50%;
-
-  background:#8ff;
-
-  box-shadow:
-    0 0 20px #00d9ff;
-}
-
-@keyframes orbit{
-
-  to{
-    transform:
-      rotate(342deg);
-  }
-
-}
-
-/* ROBOT */
-
-.robot{
-
-  position:absolute;
-
-  width:250px;
-  height:360px;
-
-  right:5%;
-
-  bottom:10px;
-
-  filter:
-    drop-shadow(
-      0 0 28px
-      rgba(0,180,255,.5)
-    );
-
-  animation:
-    robotFloat 3.5s ease-in-out infinite;
-}
-
-@keyframes robotFloat{
-
-  50%{
-    transform:
-      translateY(-13px);
-  }
-
-}
-
-.rhead{
-
-  position:absolute;
-
-  top:18px;
-  left:55px;
-
-  width:145px;
-  height:130px;
-
-  border:
-    3px solid #5ee8ff;
-
-  border-radius:
-    45% 45% 38% 38%;
-
-  background:
-    linear-gradient(
-      145deg,
-      #dbe8f0,
-      #536b7d 45%,
-      #08121c
-    );
-
-  box-shadow:
-    inset -25px -15px 35px #03080d,
-    0 0 25px #008fff;
-}
-
-.ear{
-
-  position:absolute;
-
-  top:57px;
-
-  width:25px;
-  height:50px;
-
-  border:
-    3px solid #38cfff;
-
-  background:#10293b;
-}
-
-.ear.l{
-  left:35px;
-}
-
-.ear.r{
-  right:35px;
-}
-
-.reye{
-
-  position:absolute;
-
-  top:52px;
-
-  width:29px;
-  height:17px;
-
-  background:#00d9ff;
-
-  border-radius:50%;
-
-  box-shadow:
-    0 0 18px #00d9ff;
-
-  animation:
-    eyePulse 1.2s infinite alternate;
-}
-
-@keyframes eyePulse{
-
-  to{
-    opacity:.45;
-  }
-
-}
-
-.reye.l{
-  left:30px;
-}
-
-.reye.r{
-  right:30px;
-}
-
-.rmouth{
-
-  position:absolute;
-
-  left:43px;
-  right:43px;
-
-  bottom:26px;
-
-  height:14px;
-
-  border-bottom:
-    4px solid #67eaff;
-
-  border-radius:
-    0 0 30px 30px;
-}
-
-.neck{
-
-  position:absolute;
-
-  left:94px;
-  top:145px;
-
-  width:62px;
-  height:30px;
-
-  background:#102333;
-
-  border:
-    2px solid #45dfff;
-}
-
-.rbody{
-
-  position:absolute;
-
-  left:38px;
-  top:168px;
-
-  width:174px;
-  height:165px;
-
-  border:
-    3px solid #3fdaff;
-
-  border-radius:
-    35px 35px 25px 25px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #c8d7df,
-      #324859 48%,
-      #07111b
-    );
-
-  box-shadow:
-    inset -35px -20px 45px #02060b,
-    0 0 30px rgba(0,155,255,.4);
-}
-
-.chest{
-
-  position:absolute;
-
-  left:57px;
-  top:42px;
-
-  width:60px;
-  height:60px;
-
-  border-radius:50%;
-
-  border:
-    3px solid #55eaff;
-
-  background:#06121d;
-
-  box-shadow:
-    0 0 25px #00cfff;
-}
-
-.chest:after{
-
-  content:"";
-
-  position:absolute;
-
-  inset:16px;
-
-  border-radius:50%;
-
-  background:#00d9ff;
-
-  box-shadow:
-    0 0 25px #00d9ff;
-
-  animation:
-    pulse 1.3s infinite alternate;
-}
-
-@keyframes pulse{
-
-  to{
-    transform:scale(1.25);
-    opacity:.55;
-  }
-
-}
-
-.arm{
-
-  position:absolute;
-
-  top:190px;
-
-  width:40px;
-  height:145px;
-
-  border:
-    3px solid #42dfff;
-
-  border-radius:25px;
-
-  background:
-    linear-gradient(
-      #657c8a,
-      #172735
-    );
-
-  animation:
-    arm 2.8s ease-in-out infinite alternate;
-}
-
-.arm.l{
-
-  left:3px;
-
-  transform:
-    rotate(13deg);
-}
-
-.arm.r{
-
-  right:3px;
-
-  transform:
-    rotate(-13deg);
-}
-
-@keyframes arm{
-
-  to{
-    transform:
-      rotate(18deg);
-  }
-
-}
-
-.leg{
-
-  position:absolute;
-
-  top:320px;
-
-  width:52px;
-  height:120px;
-
-  border:
-    3px solid #39d8ff;
-
-  border-radius:18px;
-
-  background:#172a38;
-}
-
-.leg.l{
-  left:58px;
-}
-
-.leg.r{
-  right:58px;
-}
-
-/* ==================================================
-   CONTROL
-================================================== */
-
-.section{
-
-  max-width:1200px;
-
-  margin:auto;
-
-  padding:
-    45px 35px;
-}
-
-.sectionTitle{
-
-  text-align:center;
-
-  margin-bottom:30px;
-}
-
-.sectionTitle .small{
-
-  color:#00bfff;
-
-  letter-spacing:4px;
-
-  font-size:11px;
-}
-
-.sectionTitle h2{
-
-  font-size:30px;
-
-  margin-top:10px;
-}
-
-.status{
-
-  display:flex;
-
-  justify-content:center;
-
-  gap:12px;
-
-  flex-wrap:wrap;
-
+.loginBox p{
+  color:#7997a8;
   margin-bottom:25px;
 }
 
-.pill{
+.loginBox input{
+  width:100%;
+  padding:14px;
+  margin-bottom:15px;
+  border-radius:7px;
+  border:1px solid #007fc9;
+  background:#061522;
+  color:white;
+  outline:none;
+}
 
-  padding:
-    9px 15px;
+.loginBox button{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:7px;
+  background:#007fc9;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
 
+#loginMessage{
+  margin-top:15px;
+  min-height:20px;
+  color:#ff6680;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:35px 20px;
+}
+
+.hero{
+  text-align:center;
+  padding:30px 10px;
+}
+
+.hero h1{
+  font-size:clamp(45px,8vw,90px);
+  letter-spacing:8px;
+  background:linear-gradient(90deg,#fff,#75ddff,#008fff);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.hero h2{
+  margin-top:10px;
+  color:#00bfff;
+}
+
+.hero p{
+  margin-top:15px;
+  color:#91aeba;
+}
+
+.status{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:25px 0;
+}
+
+.statusBox{
+  padding:10px 16px;
+  border:1px solid #075d8c;
   border-radius:30px;
-
-  border:
-    1px solid rgba(0,200,255,.3);
-
-  background:
-    rgba(0,40,65,.4);
-
-  font-size:11px;
-
-  letter-spacing:1px;
+  background:#061522;
+  font-size:13px;
 }
 
-.dot{
-
-  display:inline-block;
-
-  width:8px;
-  height:8px;
-
-  border-radius:50%;
-
-  background:#45ffad;
-
-  box-shadow:
-    0 0 10px #45ffad;
-
-  margin-right:6px;
+.online{
+  color:#45ffad;
 }
 
-.dot.offline{
-
-  background:#ff496c;
-
-  box-shadow:
-    0 0 10px #ff496c;
+.offline{
+  color:#ff6680;
 }
-
-/* ==================================================
-   RELAYS
-================================================== */
 
 .relays{
-
   display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
-  gap:16px;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
 }
 
 .relay{
-
   padding:25px;
-
-  border:
-    1px solid rgba(0,160,255,.3);
-
-  background:
-    rgba(3,18,33,.85);
-
+  background:rgba(3,18,33,.9);
+  border:1px solid #075d8c;
   border-radius:12px;
-
-  transition:.25s;
+  text-align:center;
+  transition:.2s;
 }
 
 .relay.on{
-
   border-color:#00ff9d;
-
-  box-shadow:
-    0 0 25px
-    rgba(0,255,157,.18);
+  box-shadow:0 0 25px rgba(0,255,157,.25);
 }
 
 .relay h3{
-
-  letter-spacing:2px;
+  color:#8edfff;
 }
 
-.relay .state{
-
-  margin:14px 0;
-
-  color:#ff6885;
+.state{
+  margin:18px 0;
+  color:#ff6680;
+  font-weight:bold;
 }
 
 .relay.on .state{
-
-  color:#50ffb1;
-
-  text-shadow:
-    0 0 10px #50ffb1;
+  color:#45ffad;
+  text-shadow:0 0 10px #45ffad;
 }
 
-.relay button{
-
+.relay button,
+.controlButton{
   width:100%;
-
-  padding:12px;
-
-  background:#062a48;
-
-  border:
-    1px solid #007fc9;
-
-  color:white;
-
+  padding:13px;
+  border:1px solid #008fff;
   border-radius:7px;
-
-  cursor:pointer;
-
+  background:#063456;
+  color:white;
   font-weight:bold;
+  cursor:pointer;
 }
 
-.relay button:hover{
-
-  background:#07578a;
+.relay button:hover,
+.controlButton:hover{
+  background:#007fc9;
 }
 
-/* ==================================================
-   ALL BUTTONS
-================================================== */
-
-.allButtons{
-
+.all{
   display:flex;
-
-  gap:12px;
-
+  gap:15px;
   justify-content:center;
-
-  flex-wrap:wrap;
-
-  margin-top:20px;
+  margin:25px 0;
 }
 
-/* ==================================================
-   VOICE
-================================================== */
+.all button{
+  padding:14px 30px;
+  border-radius:7px;
+  border:1px solid #00aaff;
+  background:#075d8c;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
 
 .voice{
-
-  margin-top:20px;
-
+  margin-top:25px;
   padding:25px;
-
-  border:
-    1px solid rgba(0,170,255,.3);
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(0,30,55,.8),
-      rgba(4,12,25,.8)
-    );
-
-  text-align:center;
-
+  border:1px solid #075d8c;
   border-radius:12px;
+  text-align:center;
+  background:rgba(3,18,33,.9);
 }
 
 .voice button{
-
-  padding:
-    13px 28px;
-
-  background:#006fc1;
-
+  padding:15px 25px;
+  border:1px solid #00cfff;
+  border-radius:7px;
+  background:#007fc9;
   color:white;
-
-  border:
-    1px solid #00cfff;
-
-  border-radius:6px;
-
   font-weight:bold;
-
   cursor:pointer;
-
-  box-shadow:
-    0 0 20px
-    rgba(0,160,255,.25);
-}
-
-.voice button:hover{
-
-  background:#0098ed;
 }
 
 #heard{
-
-  color:#7da8b8;
-
-  font-size:12px;
-
-  margin-top:12px;
+  margin-top:15px;
+  color:#8caab8;
 }
 
 #aiReply{
-
   margin-top:12px;
-
   color:#00cfff;
-
   font-weight:bold;
-
-  min-height:20px;
+  min-height:22px;
 }
 
-/* ==================================================
-   FOOTER
-================================================== */
+.log{
+  margin-top:25px;
+  padding:18px;
+  background:#010912;
+  border:1px solid #07334c;
+  border-radius:10px;
+  color:#79a9bb;
+  font-size:12px;
+  min-height:70px;
+}
 
 footer{
-
   margin-top:50px;
-
-  padding:35px;
-
+  padding:30px;
   text-align:center;
-
-  border-top:
-    1px solid rgba(0,160,255,.18);
-
-  background:
-    rgba(0,5,12,.8);
+  border-top:1px solid #075d8c;
+  color:#587888;
 }
 
-footer b{
-
-  letter-spacing:6px;
-
-  font-size:22px;
+@media(max-width:800px){
+  .relays{
+    grid-template-columns:1fr 1fr;
+  }
 }
 
-footer p{
-
-  font-size:10px;
-
-  color:#718b99;
-
-  letter-spacing:3px;
-
-  margin-top:9px;
-}
-
-/* ==================================================
-   MOBILE
-================================================== */
-
-@media(max-width:1050px){
-
-  .hero{
-
+@media(max-width:500px){
+  .relays{
     grid-template-columns:1fr;
   }
 
-  .heroText{
-
-    text-align:center;
+  .all{
+    flex-direction:column;
   }
-
-  .heroText p{
-
-    margin-left:auto;
-    margin-right:auto;
-  }
-
-  .buttons{
-
-    justify-content:center;
-  }
-
-  .scene{
-
-    height:470px;
-  }
-
-  .relays{
-
-    grid-template-columns:
-      repeat(2,1fr);
-  }
-
 }
-
-@media(max-width:700px){
-
-  header{
-
-    height:64px;
-  }
-
-  .brand{
-
-    font-size:18px;
-  }
-
-  .hero{
-
-    padding-top:100px;
-  }
-
-  .scene{
-
-    height:390px;
-  }
-
-  .planet{
-
-    width:300px;
-    height:300px;
-  }
-
-  .orbit{
-
-    width:350px;
-    height:120px;
-  }
-
-  .robot{
-
-    transform:scale(.7);
-
-    right:0;
-
-    bottom:-25px;
-  }
-
-  .relays{
-
-    grid-template-columns:
-      1fr 1fr;
-  }
-
-}
-
-@media(max-width:470px){
-
-  .relays{
-
-    grid-template-columns:1fr;
-  }
-
-  .heroText h1{
-
-    font-size:55px;
-  }
-
-}
-
 </style>
-
 </head>
 
 <body>
 
-<div id="stars"></div>
+<!-- LOGIN -->
 
-<div class="scan"></div>
-
-
-<!-- ==================================================
-     LOGIN
-================================================== -->
-
-<div id="loginScreen">
+<div class="login" id="loginScreen">
 
   <div class="loginBox">
 
-    <div class="loginLogo">
-      AJATRON
-    </div>
+    <h1>AJATRON</h1>
 
-    <div class="loginSubtitle">
-      HOME COMMUNICATION SYSTEM
-    </div>
-
-    <h2>
-      SECURE ENTRY
-    </h2>
+    <p>HOME COMMUNICATION SYSTEM</p>
 
     <input
-      id="passwordInput"
       type="password"
-      placeholder="ENTER PASSWORD"
-      autocomplete="off"
+      id="websitePassword"
+      placeholder="Enter password"
+      onkeydown="if(event.key==='Enter') login()"
     >
 
-    <button
-      class="loginButton"
-      onclick="login()">
-
-      🔐 ENTER AJATRON
-
+    <button onclick="login()">
+      ENTER AJATRON
     </button>
 
     <div id="loginMessage"></div>
@@ -1406,199 +344,47 @@ footer p{
 </div>
 
 
-<!-- ==================================================
-     MAIN WEBSITE
-================================================== -->
-
-<div id="mainSite">
-
-
 <header>
-
-  <div class="nav">
-
-    <div>
-
-      <div class="brand">
-        AJATRON
-      </div>
-
-      <div class="tag">
-        HOME COMMUNICATION • AI CONTROL
-      </div>
-
-    </div>
-
-  </div>
-
+  <div class="logo">AJATRON</div>
 </header>
 
 
-<!-- ==================================================
-     HERO
-================================================== -->
+<div class="container">
 
-<section class="hero">
+  <section class="hero">
 
-  <div class="heroText">
+    <h1>AJATRON</h1>
 
-    <div class="kicker">
-      AJATRON HOME COMMUNICATION SYSTEM
-    </div>
-
-    <h1>
-      <span>AJATRON</span>
-    </h1>
-
-    <h2>
-      AI SMART HOME
-      <b>CONTROL</b>
-    </h2>
+    <h2>HOME COMMUNICATION</h2>
 
     <p>
-      Control your ESP8266 and four relays
-      using buttons, physical switches and
-      AI voice commands.
+      ESP8266 • MQTT • 4 RELAYS • 4 SWITCHES • AI VOICE
     </p>
 
-    <div class="buttons">
-
-      <button
-        class="btn"
-        onclick="scrollToControl()">
-
-        ⚡ OPEN CONTROL
-
-      </button>
-
-      <button
-        class="btn secondary"
-        onclick="startVoice()">
-
-        🎤 VOICE CONTROL
-
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <!-- ROBOT -->
-
-  <div class="scene">
-
-    <div class="planet"></div>
-
-    <div class="orbit"></div>
-
-
-    <div class="robot">
-
-      <div class="ear l"></div>
-      <div class="ear r"></div>
-
-      <div class="rhead">
-
-        <div class="reye l"></div>
-        <div class="reye r"></div>
-
-        <div class="rmouth"></div>
-
-      </div>
-
-      <div class="neck"></div>
-
-      <div class="rbody">
-
-        <div class="chest"></div>
-
-      </div>
-
-      <div class="arm l"></div>
-      <div class="arm r"></div>
-
-      <div class="leg l"></div>
-      <div class="leg r"></div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- ==================================================
-     CONTROL
-================================================== -->
-
-<section
-  class="section"
-  id="control">
-
-  <div class="sectionTitle">
-
-    <div class="small">
-      AJATRON HOME CORE
-    </div>
-
-    <h2>
-      ESP8266 • MQTT • RELAY • VOICE
-    </h2>
-
-  </div>
+  </section>
 
 
   <!-- STATUS -->
 
   <div class="status">
 
-    <div class="pill">
-
-      <span
-        id="websiteDot"
-        class="dot">
-      </span>
-
-      WEBSITE ONLINE
-
+    <div class="statusBox">
+      WEBSITE:
+      <span class="online">ONLINE</span>
     </div>
 
-
-    <div class="pill">
-
-      <span
-        id="espDot"
-        class="dot offline">
-      </span>
-
-      ESP8266
-      <span id="espStatus">
-        OFFLINE
-      </span>
-
-    </div>
-
-
-    <div class="pill">
-
-      <span
-        id="mqttDot"
-        class="dot offline">
-      </span>
-
-      MQTT
-      <span id="mqttStatus">
+    <div class="statusBox">
+      MQTT:
+      <span id="mqttStatus" class="offline">
         DISCONNECTED
       </span>
-
     </div>
 
-
-    <div class="pill">
-
-      4 RELAYS • 4 SWITCHES
-
+    <div class="statusBox">
+      ESP8266:
+      <span id="espStatus" class="offline">
+        OFFLINE
+      </span>
     </div>
 
   </div>
@@ -1608,116 +394,41 @@ footer p{
 
   <div class="relays">
 
-
-    <div
-      class="relay"
-      id="r1">
-
-      <h3>
-        RELAY 01
-      </h3>
-
-      <div class="state">
-        ● OFF
-      </div>
-
-      <button
-        onclick="toggleRelay(1)">
-
-        ON / OFF
-
-      </button>
-
+    <div class="relay" id="r1">
+      <h3>RELAY 01</h3>
+      <div class="state" id="s1">● OFF</div>
+      <button onclick="toggleRelay(1)">ON / OFF</button>
     </div>
 
-
-    <div
-      class="relay"
-      id="r2">
-
-      <h3>
-        RELAY 02
-      </h3>
-
-      <div class="state">
-        ● OFF
-      </div>
-
-      <button
-        onclick="toggleRelay(2)">
-
-        ON / OFF
-
-      </button>
-
+    <div class="relay" id="r2">
+      <h3>RELAY 02</h3>
+      <div class="state" id="s2">● OFF</div>
+      <button onclick="toggleRelay(2)">ON / OFF</button>
     </div>
 
-
-    <div
-      class="relay"
-      id="r3">
-
-      <h3>
-        RELAY 03
-      </h3>
-
-      <div class="state">
-        ● OFF
-      </div>
-
-      <button
-        onclick="toggleRelay(3)">
-
-        ON / OFF
-
-      </button>
-
+    <div class="relay" id="r3">
+      <h3>RELAY 03</h3>
+      <div class="state" id="s3">● OFF</div>
+      <button onclick="toggleRelay(3)">ON / OFF</button>
     </div>
 
-
-    <div
-      class="relay"
-      id="r4">
-
-      <h3>
-        RELAY 04
-      </h3>
-
-      <div class="state">
-        ● OFF
-      </div>
-
-      <button
-        onclick="toggleRelay(4)">
-
-        ON / OFF
-
-      </button>
-
+    <div class="relay" id="r4">
+      <h3>RELAY 04</h3>
+      <div class="state" id="s4">● OFF</div>
+      <button onclick="toggleRelay(4)">ON / OFF</button>
     </div>
 
   </div>
 
 
-  <!-- ALL -->
+  <div class="all">
 
-  <div class="allButtons">
-
-    <button
-      class="btn"
-      onclick="allRelays(true)">
-
+    <button onclick="allRelay(true)">
       ⚡ ALL ON
-
     </button>
 
-
-    <button
-      class="btn secondary"
-      onclick="allRelays(false)">
-
+    <button onclick="allRelay(false)">
       ⛔ ALL OFF
-
     </button>
 
   </div>
@@ -1727,102 +438,103 @@ footer p{
 
   <div class="voice">
 
-    <button
-      onclick="startVoice()">
-
-      🎤 START AI VOICE CONTROL
-
+    <button onclick="startVoice()">
+      🎤 START VOICE CONTROL
     </button>
 
-
     <div id="heard">
-
-      Say:
-      ONE ON • TWO ON • 1 2 ON •
-      134 ON • 1234 ON • ALL OFF
-
+      Say: ONE ON, TWO OFF, 1 2 ON, 134 ON, 1234 ON...
     </div>
 
-
     <div id="aiReply">
-
-      AI: Ready. Waiting for your command.
-
+      AI: Welcome to AJATRON.
     </div>
 
   </div>
 
-</section>
 
-
-<footer>
-
-  <b>
-    AJATRON
-  </b>
-
-  <p>
-    HOME COMMUNICATION SYSTEM
-  </p>
-
-  <p>
-    ESP8266 • MQTT • 4 RELAYS • AI VOICE CONTROL
-  </p>
-
-</footer>
+  <div class="log" id="log">
+    System starting...
+  </div>
 
 </div>
 
 
-<!-- ==================================================
-     JAVASCRIPT
-================================================== -->
+<footer>
+
+  <b>AJATRON</b>
+
+  <p>SMART HOME • HOME COMMUNICATION SYSTEM</p>
+
+</footer>
+
 
 <script>
 
-/* ==================================================
-   SETTINGS
-================================================== */
-
-
-/*
-======================================================
-CHANGE THESE SETTINGS
-======================================================
-*/
-
-
-/* WEBSITE PASSWORD */
+/* =========================================
+   WEBSITE PASSWORD
+========================================= */
 
 const WEBSITE_PASSWORD = "2627";
 
 
-/*
-======================================================
-HIVEMQ MQTT SETTINGS
+function login(){
 
-CHANGE THESE TO YOUR HIVEMQ DETAILS
-======================================================
-*/
+  const entered =
+    document.getElementById("websitePassword").value;
+
+  const message =
+    document.getElementById("loginMessage");
+
+  if(entered === WEBSITE_PASSWORD){
+
+    document.getElementById("loginScreen").style.display="none";
+
+    speak(
+      "Welcome to Ajatron Home Communication."
+    );
+
+    logMessage(
+      "Welcome to AJATRON Home Communication."
+    );
+
+  }else{
+
+    message.textContent =
+      "You are rejected. Please try again.";
+
+    document.getElementById("websitePassword").value="";
+
+    speak(
+      "Access rejected. Please try again."
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   MQTT SETTINGS
+========================================= */
 
 const MQTT_HOST =
   "2ed680f152fb4eb39e590ed9803a3a63.s1.eu.hivemq.cloud";
 
-const MQTT_PORT =
-  8884;
+const MQTT_PORT = 8884;
 
 const MQTT_USERNAME =
   "ajatrontest";
 
-const MQTT_PASSWORD =
-  "@Ajatron1234";
-
-
 /*
-======================================================
-MQTT TOPICS
-======================================================
+ IMPORTANT:
+ Put the SAME HiveMQ password here
+ that you use in the ESP8266 code.
 */
+
+const MQTT_PASSWORD =
+  "@Ajay1234";
+
 
 const COMMAND_TOPIC =
   "ajatron/command";
@@ -1834,9 +546,9 @@ const STATUS_TOPIC =
   "ajatron/status";
 
 
-/* ==================================================
+/* =========================================
    RELAY STATES
-================================================== */
+========================================= */
 
 let states = [
   false,
@@ -1846,459 +558,213 @@ let states = [
 ];
 
 
-/* ==================================================
-   MQTT CLIENT
-================================================== */
-
-let mqttClient = null;
-
-
-/* ==================================================
-   LOGIN
-================================================== */
-
-function login(){
-
-  const input =
-    document.getElementById(
-      "passwordInput"
-    ).value.trim();
-
-
-  if(input === WEBSITE_PASSWORD){
-
-    document.getElementById(
-      "loginScreen"
-    ).style.display = "none";
-
-
-    document.getElementById(
-      "mainSite"
-    ).style.display = "block";
-
-
-    welcomeMessage();
-
-
-    connectMQTT();
-
-  }else{
-
-    document.getElementById(
-      "loginMessage"
-    ).textContent =
-      "❌ ACCESS REJECTED — PLEASE TRY AGAIN";
-
-
-    speak(
-      "Access rejected. Please try again."
-    );
-
-  }
-
-}
-
-
-/* ENTER KEY */
-
-document
-  .getElementById("passwordInput")
-  .addEventListener(
-    "keydown",
-    function(event){
-
-      if(event.key === "Enter"){
-
-        login();
-
-      }
-
-    }
-  );
-
-
-/* ==================================================
-   WELCOME
-================================================== */
-
-function welcomeMessage(){
-
-  const message =
-    "Welcome to AJATRON Home Communication. Voice control is ready.";
-
-
-  document.getElementById(
-    "aiReply"
-  ).textContent =
-    "AI: " + message;
-
-
-  speak(message);
-
-}
-
-
-/* ==================================================
-   AI SPEECH
-================================================== */
-
-function speak(text){
-
-  if(!("speechSynthesis" in window)){
-    return;
-  }
-
-
-  speechSynthesis.cancel();
-
-
-  const speech =
-    new SpeechSynthesisUtterance(text);
-
-
-  speech.rate =
-    0.95;
-
-
-  speech.pitch =
-    1.05;
-
-
-  speech.volume =
-    1;
-
-
-  speechSynthesis.speak(
-    speech
-  );
-
-}
-
-
-/* ==================================================
+/* =========================================
    MQTT CONNECT
-================================================== */
+========================================= */
+
+let mqttClient;
+
 
 function connectMQTT(){
 
-  if(
-    MQTT_HOST ===
-    "YOUR_HIVEMQ_HOST"
-  ){
+  logMessage("Connecting to HiveMQ...");
 
-    console.log(
-      "MQTT settings have not been changed."
-    );
-
-    return;
-  }
-
-
-  const script =
-    document.createElement("script");
-
-
-  script.src =
-    "https://unpkg.com/mqtt/dist/mqtt.min.js";
-
-
-  script.onload =
-    function(){
-
-      startMQTT();
-
-    };
-
-
-  document
-    .head
-    .appendChild(script);
-
-}
-
-
-/* ==================================================
-   START MQTT
-================================================== */
-
-function startMQTT(){
-
-  const url =
+  mqttClient = mqtt.connect(
     "wss://" +
     MQTT_HOST +
     ":" +
     MQTT_PORT +
-    "/mqtt";
+    "/mqtt",
+    {
+      username: MQTT_USERNAME,
+      password: MQTT_PASSWORD,
 
+      clientId:
+        "AJATRON_WEB_" +
+        Math.random()
+        .toString(16)
+        .substring(2),
 
-  mqttClient =
-    mqtt.connect(
-      url,
-      {
-
-        username:
-          MQTT_USERNAME,
-
-        password:
-          MQTT_PASSWORD,
-
-        clean:true,
-
-        reconnectPeriod:3000,
-
-        connectTimeout:10000
-
-      }
-    );
-
-
-  mqttClient.on(
-    "connect",
-    function(){
-
-      console.log(
-        "MQTT CONNECTED"
-      );
-
-
-      setMQTTStatus(true);
-
-
-      mqttClient.subscribe(
-        STATE_TOPIC
-      );
-
-
-      mqttClient.subscribe(
-        STATUS_TOPIC
-      );
-
-
-      speak(
-        "MQTT connected. AJATRON is online."
-      );
-
+      clean:true,
+      reconnectPeriod:3000
     }
   );
 
 
-  mqttClient.on(
-    "message",
-    function(topic,message){
+  mqttClient.on("connect",function(){
 
-      const data =
-        message.toString().trim();
-
-
-      console.log(
-        topic,
-        data
-      );
-
-
-      if(
-        topic === STATE_TOPIC
-      ){
-
-        processState(data);
-
-      }
-
-
-      if(
-        topic === STATUS_TOPIC
-      ){
-
-        processStatus(data);
-
-      }
-
-    }
-  );
-
-
-  mqttClient.on(
-    "error",
-    function(error){
-
-      console.error(
-        "MQTT ERROR",
-        error
-      );
-
-      setMQTTStatus(false);
-
-    }
-  );
-
-
-  mqttClient.on(
-    "close",
-    function(){
-
-      setMQTTStatus(false);
-
-      setESPStatus(false);
-
-    }
-  );
-
-}
-
-
-/* ==================================================
-   MQTT STATUS
-================================================== */
-
-function setMQTTStatus(online){
-
-  const dot =
-    document.getElementById(
-      "mqttDot"
-    );
-
-  const text =
-    document.getElementById(
-      "mqttStatus"
-    );
-
-
-  if(online){
-
-    dot.classList.remove(
-      "offline"
-    );
-
-    text.textContent =
+    document.getElementById("mqttStatus").textContent =
       "CONNECTED";
 
-  }else{
+    document.getElementById("mqttStatus").className =
+      "online";
 
-    dot.classList.add(
-      "offline"
+    logMessage("MQTT connected.");
+
+    mqttClient.subscribe(
+      STATE_TOPIC
     );
 
-    text.textContent =
-      "DISCONNECTED";
-
-  }
-
-}
-
-
-/* ==================================================
-   ESP STATUS
-================================================== */
-
-function setESPStatus(online){
-
-  const dot =
-    document.getElementById(
-      "espDot"
+    mqttClient.subscribe(
+      STATUS_TOPIC
     );
 
-  const text =
-    document.getElementById(
-      "espStatus"
+  });
+
+
+  mqttClient.on("message",function(topic,message){
+
+    const text =
+      message.toString();
+
+    logMessage(
+      topic + " → " + text
     );
 
 
-  if(online){
+    /* ESP STATUS */
 
-    dot.classList.remove(
-      "offline"
+    if(topic === STATUS_TOPIC){
+
+      if(
+        text.toUpperCase().includes("ONLINE") ||
+        text === "1"
+      ){
+
+        document.getElementById("espStatus").textContent =
+          "ONLINE";
+
+        document.getElementById("espStatus").className =
+          "online";
+
+      }else{
+
+        document.getElementById("espStatus").textContent =
+          "OFFLINE";
+
+        document.getElementById("espStatus").className =
+          "offline";
+
+      }
+
+      return;
+    }
+
+
+    /* RELAY STATE */
+
+    if(topic === STATE_TOPIC){
+
+      readState(text);
+
+    }
+
+  });
+
+
+  mqttClient.on("error",function(error){
+
+    console.log(error);
+
+    document.getElementById("mqttStatus").textContent =
+      "ERROR";
+
+    document.getElementById("mqttStatus").className =
+      "offline";
+
+    logMessage(
+      "MQTT ERROR: " + error.message
     );
 
-    text.textContent =
-      "ONLINE";
+  });
 
-  }else{
 
-    dot.classList.add(
-      "offline"
-    );
+  mqttClient.on("offline",function(){
 
-    text.textContent =
+    document.getElementById("mqttStatus").textContent =
       "OFFLINE";
 
-  }
+    document.getElementById("mqttStatus").className =
+      "offline";
+
+  });
 
 }
 
 
-/* ==================================================
-   SEND MQTT
-================================================== */
+/* =========================================
+   SEND COMMAND
+========================================= */
 
-function sendCommand(
-  relay,
-  state
-){
-
-  const message =
-    relay + ":" +
-    (state ? "ON" : "OFF");
-
+function sendCommand(command){
 
   if(
-    mqttClient &&
-    mqttClient.connected
+    !mqttClient ||
+    !mqttClient.connected
   ){
 
-    mqttClient.publish(
-      COMMAND_TOPIC,
-      message
+    speak(
+      "MQTT is not connected."
     );
 
+    logMessage(
+      "Command not sent. MQTT disconnected."
+    );
 
-    console.log(
-      "MQTT SEND:",
-      message
+    return;
+
+  }
+
+  mqttClient.publish(
+    COMMAND_TOPIC,
+    command
+  );
+
+  logMessage(
+    "COMMAND → " + command
+  );
+
+}
+
+
+/* =========================================
+   RELAY BUTTON
+========================================= */
+
+function toggleRelay(n){
+
+  const newState =
+    !states[n-1];
+
+  const command =
+    "RELAY" + n + "_" +
+    (newState ? "ON" : "OFF");
+
+  sendCommand(command);
+
+}
+
+
+/* =========================================
+   ALL RELAYS
+========================================= */
+
+function allRelay(on){
+
+  if(on){
+
+    sendCommand("ALL_ON");
+
+    speak(
+      "All four relays are on."
     );
 
   }else{
 
-    console.log(
-      "MQTT not connected:",
-      message
-    );
-
-  }
-
-}
-
-
-/* ==================================================
-   SET RELAY
-================================================== */
-
-function setRelay(
-  relay,
-  state,
-  announce = true
-){
-
-  states[
-    relay - 1
-  ] = state;
-
-
-  drawRelay(relay);
-
-
-  sendCommand(
-    relay,
-    state
-  );
-
-
-  if(announce){
+    sendCommand("ALL_OFF");
 
     speak(
-      "Relay " +
-      relay +
-      " is " +
-      (state ? "ON." : "OFF.")
+      "All four relays are off."
     );
 
   }
@@ -2306,101 +772,100 @@ function setRelay(
 }
 
 
-/* ==================================================
-   TOGGLE RELAY
-================================================== */
+/* =========================================
+   RECEIVE ESP STATE
+========================================= */
 
-function toggleRelay(relay){
+function readState(text){
 
-  setRelay(
-    relay,
-    !states[
-      relay - 1
-    ]
-  );
+  text =
+    text.toUpperCase().trim();
 
-}
+  /*
+    Supported examples:
+
+    RELAY1_ON
+    RELAY1_OFF
+    RELAY2_ON
+    RELAY2_OFF
+    RELAY3_ON
+    RELAY3_OFF
+    RELAY4_ON
+    RELAY4_OFF
+
+    ALL_ON
+    ALL_OFF
+  */
 
 
-/* ==================================================
-   ALL RELAYS
-================================================== */
+  if(text === "ALL_ON"){
 
-function allRelays(on){
+    for(let i=1;i<=4;i++){
+      updateRelay(i,true);
+    }
 
-  for(
-    let i=1;
-    i<=4;
-    i++
-  ){
-
-    states[
-      i-1
-    ] = on;
-
-    drawRelay(i);
-
+    return;
   }
 
 
-  if(
-    mqttClient &&
-    mqttClient.connected
-  ){
+  if(text === "ALL_OFF"){
 
-    mqttClient.publish(
-      COMMAND_TOPIC,
-      on ? "ALL_ON" : "ALL_OFF"
+    for(let i=1;i<=4;i++){
+      updateRelay(i,false);
+    }
+
+    return;
+  }
+
+
+  const match =
+    text.match(
+      /RELAY\s*([1-4])[_ ](ON|OFF)/
+    );
+
+
+  if(match){
+
+    const relay =
+      Number(match[1]);
+
+    const state =
+      match[2] === "ON";
+
+    updateRelay(
+      relay,
+      state
     );
 
   }
 
-
-  speak(
-    on
-      ? "All four relays are ON."
-      : "All four relays are OFF."
-  );
-
 }
 
 
-/* ==================================================
-   DRAW RELAY
-================================================== */
+/* =========================================
+   UPDATE WEBSITE
+========================================= */
 
-function drawRelay(relay){
+function updateRelay(n,on){
+
+  states[n-1] = on;
 
   const box =
-    document.getElementById(
-      "r" + relay
-    );
-
+    document.getElementById("r"+n);
 
   const state =
-    box.querySelector(
-      ".state"
-    );
+    document.getElementById("s"+n);
 
+  if(on){
 
-  if(
-    states[
-      relay - 1
-    ]
-  ){
-
-    box.classList.add(
-      "on"
-    );
+    box.classList.add("on");
 
     state.textContent =
       "● ON";
 
   }else{
 
-    box.classList.remove(
-      "on"
-    );
+    box.classList.remove("on");
 
     state.textContent =
       "● OFF";
@@ -2410,414 +875,57 @@ function drawRelay(relay){
 }
 
 
-/* ==================================================
-   PROCESS STATE FROM ESP8266
-================================================== */
-
-function processState(data){
-
-  data =
-    data.toUpperCase().trim();
-
-
-  /*
-  Examples accepted:
-
-  1:ON
-  2:OFF
-  3:ON
-  4:OFF
-
-  */
-
-
-  const match =
-    data.match(
-      /([1-4])\s*[:=]\s*(ON|OFF)/
-    );
-
-
-  if(match){
-
-    const relay =
-      parseInt(
-        match[1]
-      );
-
-    const state =
-      match[2] === "ON";
-
-
-    states[
-      relay - 1
-    ] = state;
-
-
-    drawRelay(
-      relay
-    );
-
-
-    setESPStatus(
-      true
-    );
-
-    return;
-
-  }
-
-
-  /*
-  Alternative state format:
-
-  R1 ON
-  R2 OFF
-  */
-
-  const match2 =
-    data.match(
-      /R([1-4])\s*(ON|OFF)/
-    );
-
-
-  if(match2){
-
-    const relay =
-      parseInt(
-        match2[1]
-      );
-
-    const state =
-      match2[2] === "ON";
-
-
-    states[
-      relay - 1
-    ] = state;
-
-
-    drawRelay(
-      relay
-    );
-
-
-    setESPStatus(
-      true
-    );
-
-  }
-
-}
-
-
-/* ==================================================
-   ESP STATUS MESSAGE
-================================================== */
-
-function processStatus(data){
-
-  data =
-    data.toUpperCase().trim();
-
-
-  if(
-    data === "ONLINE" ||
-    data === "ON"
-  ){
-
-    setESPStatus(
-      true
-    );
-
-  }
-
-
-  if(
-    data === "OFFLINE" ||
-    data === "OFF"
-  ){
-
-    setESPStatus(
-      false
-    );
-
-  }
-
-}
-
-
-/* ==================================================
+/* =========================================
    VOICE
-================================================== */
+========================================= */
 
 function startVoice(){
 
-  const SpeechRecognition =
+  const Recognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
-
-  if(!SpeechRecognition){
+  if(!Recognition){
 
     speak(
-      "Voice recognition is not supported. Please use Google Chrome."
+      "Voice recognition is not supported. Please use Chrome."
     );
 
     return;
-
   }
 
-
   const recognition =
-    new SpeechRecognition();
-
+    new Recognition();
 
   recognition.lang =
     "en-US";
 
-
   recognition.interimResults =
     false;
-
 
   recognition.maxAlternatives =
     5;
 
 
-  document.getElementById(
-    "heard"
-  ).textContent =
+  document.getElementById("heard").textContent =
     "🎤 LISTENING...";
 
 
   recognition.onresult =
     function(event){
 
-      let text =
-        event
-        .results[0][0]
+      const text =
+        event.results[0][0]
         .transcript
         .toLowerCase()
         .trim();
 
 
-      document.getElementById(
-        "heard"
-      ).textContent =
+      document.getElementById("heard").textContent =
         "HEARD: " + text;
 
 
-      console.log(
-        "VOICE:",
-        text
-      );
-
-
-      /* =========================
-         ALL ON
-      ========================= */
-
-      if(
-        text.includes("all on") ||
-        text.includes("all one")
-      ){
-
-        allRelays(true);
-
-        return;
-
-      }
-
-
-      /* =========================
-         ALL OFF
-      ========================= */
-
-      if(
-        text.includes("all off")
-      ){
-
-        allRelays(false);
-
-        return;
-
-      }
-
-
-      /* =========================
-         ON / OFF
-      ========================= */
-
-      let command =
-        null;
-
-
-      if(
-        /\boff\b/.test(text)
-      ){
-
-        command =
-          false;
-
-      }
-
-
-      if(
-        /\bon\b/.test(text)
-      ){
-
-        command =
-          true;
-
-      }
-
-
-      if(
-        command === null
-      ){
-
-        speak(
-          "Please say the relay numbers followed by ON or OFF."
-        );
-
-        return;
-
-      }
-
-
-      /* =========================
-         WORD NUMBERS
-      ========================= */
-
-      text =
-        text
-        .replace(
-          /one/g,
-          "1"
-        )
-        .replace(
-          /two/g,
-          "2"
-        )
-        .replace(
-          /three/g,
-          "3"
-        )
-        .replace(
-          /four/g,
-          "4"
-        );
-
-
-      /* =========================
-         FIND NUMBERS
-      ========================= */
-
-      let numbers =
-        text.match(
-          /[1-4]/g
-        );
-
-
-      if(
-        !numbers ||
-        numbers.length === 0
-      ){
-
-        speak(
-          "I could not find a relay number."
-        );
-
-        return;
-
-      }
-
-
-      /* =========================
-         REMOVE DUPLICATES
-      ========================= */
-
-      let relays =
-        [];
-
-
-      numbers.forEach(
-        function(num){
-
-          const relay =
-            parseInt(num);
-
-
-          if(
-            relay >= 1 &&
-            relay <= 4 &&
-            !relays.includes(
-              relay
-            )
-          ){
-
-            relays.push(
-              relay
-            );
-
-          }
-
-        }
-      );
-
-
-      /* =========================
-         CONTROL
-      ========================= */
-
-      relays.forEach(
-        function(relay){
-
-          setRelay(
-            relay,
-            command,
-            false
-          );
-
-        }
-      );
-
-
-      /* =========================
-         AI RESPONSE
-      ========================= */
-
-      const relayText =
-        relays.join(
-          ", "
-        );
-
-
-      if(
-        relays.length === 1
-      ){
-
-        speak(
-          "Relay " +
-          relayText +
-          " is now " +
-          (command
-            ? "ON."
-            : "OFF.")
-        );
-
-      }else{
-
-        speak(
-          "Relays " +
-          relayText +
-          " are now " +
-          (command
-            ? "ON."
-            : "OFF.")
-        );
-
-      }
+      processVoice(text);
 
     };
 
@@ -2825,14 +933,8 @@ function startVoice(){
   recognition.onerror =
     function(){
 
-      document.getElementById(
-        "heard"
-      ).textContent =
-        "Voice error — try again.";
-
-      speak(
-        "I could not hear the command. Please try again."
-      );
+      document.getElementById("heard").textContent =
+        "Voice error. Try again.";
 
     };
 
@@ -2842,67 +944,234 @@ function startVoice(){
 }
 
 
-/* ==================================================
-   SCROLL
-================================================== */
+/* =========================================
+   VOICE COMMAND PROCESSOR
+========================================= */
 
-function scrollToControl(){
+function processVoice(text){
 
-  document
-    .getElementById(
-      "control"
-    )
-    .scrollIntoView({
-      behavior:"smooth"
-    });
+  text =
+    text
+    .replace(/,/g," ")
+    .replace(/-/g," ")
+    .replace(/\s+/g," ")
+    .trim();
+
+
+  /* ALL ON */
+
+  if(
+    text.includes("all on") ||
+    text.includes("all one")
+  ){
+
+    allRelay(true);
+
+    return;
+
+  }
+
+
+  /* ALL OFF */
+
+  if(
+    text.includes("all off")
+  ){
+
+    allRelay(false);
+
+    return;
+
+  }
+
+
+  /*
+    Detect requested relays.
+
+    Examples:
+
+    "one on"
+    "two on"
+    "1 2 on"
+    "3 4 on"
+    "134 on"
+    "1234 on"
+    "341 on"
+  */
+
+
+  let numbers = [];
+
+
+  if(text.includes("one") || /\b1\b/.test(text))
+    numbers.push(1);
+
+  if(text.includes("two") || /\b2\b/.test(text))
+    numbers.push(2);
+
+  if(text.includes("three") || /\b3\b/.test(text))
+    numbers.push(3);
+
+  if(text.includes("four") || /\b4\b/.test(text))
+    numbers.push(4);
+
+
+  /*
+    Detect combined numbers.
+
+    Example:
+    "134 on"
+    "1234 on"
+    "341 on"
+  */
+
+  const combined =
+    text.match(/\b[1-4]{2,4}\b/);
+
+  if(combined){
+
+    numbers = [];
+
+    for(
+      const digit of combined[0]
+    ){
+
+      const n =
+        Number(digit);
+
+      if(!numbers.includes(n)){
+        numbers.push(n);
+      }
+
+    }
+
+  }
+
+
+  /* Remove duplicates */
+
+  numbers =
+    [...new Set(numbers)];
+
+
+  if(numbers.length === 0){
+
+    speak(
+      "I did not understand the relay number."
+    );
+
+    return;
+
+  }
+
+
+  /* ON */
+
+  if(
+    text.includes("on") ||
+    text.includes("one")
+  ){
+
+    for(const n of numbers){
+
+      sendCommand(
+        "RELAY" + n + "_ON"
+      );
+
+    }
+
+    speak(
+      "Relay " +
+      numbers.join(", ") +
+      " on."
+    );
+
+    return;
+
+  }
+
+
+  /* OFF */
+
+  if(text.includes("off")){
+
+    for(const n of numbers){
+
+      sendCommand(
+        "RELAY" + n + "_OFF"
+      );
+
+    }
+
+    speak(
+      "Relay " +
+      numbers.join(", ") +
+      " off."
+    );
+
+    return;
+
+  }
+
+
+  speak(
+    "Please say relay numbers followed by on or off."
+  );
 
 }
 
 
-/* ==================================================
-   STARS
-================================================== */
+/* =========================================
+   AI VOICE
+========================================= */
 
-for(
-  let i=0;
-  i<90;
-  i++
-){
+function speak(text){
 
-  const star =
-    document.createElement(
-      "i"
+  document.getElementById("aiReply").textContent =
+    "AI: " + text;
+
+  if("speechSynthesis" in window){
+
+    speechSynthesis.cancel();
+
+    const speech =
+      new SpeechSynthesisUtterance(text);
+
+    speech.rate =
+      0.95;
+
+    speech.pitch =
+      1.05;
+
+    speech.volume =
+      1;
+
+    speechSynthesis.speak(
+      speech
     );
 
-
-  star.className =
-    "star";
-
-
-  star.style.left =
-    Math.random()*100 +
-    "%";
-
-
-  star.style.top =
-    Math.random()*100 +
-    "%";
-
-
-  star.style.animationDelay =
-    Math.random()*2 +
-    "s";
-
-
-  document
-    .getElementById(
-      "stars"
-    )
-    .appendChild(
-      star
-    );
+  }
 
 }
+
+
+/* =========================================
+   LOG
+========================================= */
+
+function logMessage(text){
+
+  document.getElementById("log").textContent =
+    text;
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+connectMQTT();
 
 </script>
 
